@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_logic.dart';
 import 'register_page.dart';
+import 'home_page_user.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -54,9 +55,13 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     /*loginLogic.handleLogin(
-                      emailController.text.trim(),
-                      passwordController.text,
-                    ); */
+                  emailController.text.trim(),
+                  passwordController.text,
+                  ); */
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
                   },
                   child: Text('Login'),
                   style: ElevatedButton.styleFrom(
