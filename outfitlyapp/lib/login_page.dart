@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'login_logic.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final LoginLogic loginLogic = LoginLogic();
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +53,10 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Add login logic here
-                    print(
-                      'Login: ${emailController.text}, ${passwordController.text}',
-                    );
+                    /*loginLogic.handleLogin(
+                      emailController.text.trim(),
+                      passwordController.text,
+                    ); */
                   },
                   child: Text('Login'),
                   style: ElevatedButton.styleFrom(
@@ -67,8 +70,10 @@ class LoginPage extends StatelessWidget {
               // Register Button
               TextButton(
                 onPressed: () {
-                  // TODO: Navigate to registration page
-                  print('Navigate to Register');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterPage()),
+                  );
                 },
                 child: Text('Don\'t have an account? Register'),
               ),
