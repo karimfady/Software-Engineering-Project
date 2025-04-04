@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'login_logic.dart';
 
 class RegisterPage extends StatelessWidget {
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController streetController = TextEditingController();
+  final TextEditingController postalCodeController = TextEditingController();
+
   final LoginLogic loginLogic = LoginLogic();
 
   @override
@@ -17,69 +24,73 @@ class RegisterPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 40.0),
         child: Column(
           children: [
-            // Full Name
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Full Name',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
-              ),
+            buildTextField('First Name', Icons.person, firstNameController),
+            SizedBox(height: 20),
+            buildTextField(
+              'Last Name',
+              Icons.person_outline,
+              lastNameController,
             ),
             SizedBox(height: 20),
-
-            // Email
-            TextField(
-              controller: emailController,
+            buildTextField(
+              'Username',
+              Icons.account_circle,
+              usernameController,
+            ),
+            SizedBox(height: 20),
+            buildTextField(
+              'Email',
+              Icons.email,
+              emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-              ),
             ),
             SizedBox(height: 20),
-
-            // Password
-            TextField(
-              controller: passwordController,
+            buildTextField(
+              'Password',
+              Icons.lock,
+              passwordController,
               obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-              ),
             ),
             SizedBox(height: 20),
-
-            // Confirm Password
-            TextField(
-              controller: confirmPasswordController,
+            buildTextField(
+              'Confirm Password',
+              Icons.lock_outline,
+              confirmPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock_outline),
-              ),
+            ),
+            SizedBox(height: 20),
+            buildTextField('Country', Icons.public, countryController),
+            SizedBox(height: 20),
+            buildTextField('City', Icons.location_city, cityController),
+            SizedBox(height: 20),
+            buildTextField('Street', Icons.streetview, streetController),
+            SizedBox(height: 20),
+            buildTextField(
+              'Postal Code',
+              Icons.local_post_office,
+              postalCodeController,
+              keyboardType: TextInputType.number,
             ),
             SizedBox(height: 30),
-
-            // Register Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Add registration logic here
-
                   if (passwordController.text ==
                       confirmPasswordController.text) {
                     loginLogic.handleregisteration(
-                      nameController.text.trim(),
+                      firstNameController.text.trim(),
+                      lastNameController.text.trim(),
+                      usernameController.text.trim(),
                       emailController.text.trim(),
                       passwordController.text,
+                      countryController.text.trim(),
+                      cityController.text.trim(),
+                      streetController.text.trim(),
+                      postalCodeController.text.trim(),
                     );
                   } else {
-                    print('make sure the passwords are compatible');
+                    print('Make sure the passwords are compatible');
                   }
                 },
                 child: Text('Register'),
@@ -91,6 +102,25 @@ class RegisterPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildTextField(
+    String label,
+    IconData icon,
+    TextEditingController controller, {
+    bool obscureText = false,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(icon),
       ),
     );
   }

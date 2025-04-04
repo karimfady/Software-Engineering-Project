@@ -54,14 +54,17 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    /*loginLogic.handleLogin(
-                  emailController.text.trim(),
-                  passwordController.text,
-                  ); */
+                    loginLogic.handleLogin(
+                      emailController.text.trim().toLowerCase(),
+                      passwordController.text,
+                      context,
+                    );
+                    /*
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => const HomePage()),
                     );
+                  */
                   },
                   child: Text('Login'),
                   style: ElevatedButton.styleFrom(
