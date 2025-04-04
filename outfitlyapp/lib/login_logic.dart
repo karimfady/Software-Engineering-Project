@@ -23,7 +23,7 @@ class LoginLogic {
         final response =
             await Supabase.instance.client
                 .from('User') // 👈 use your exact table name
-                .select('password')
+                .select("*")
                 .eq('email', email)
                 .maybeSingle(); // fetches at most 1 row, returns null if none
 
