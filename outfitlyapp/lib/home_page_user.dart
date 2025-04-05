@@ -4,6 +4,7 @@ import 'shopping_cart_user.dart';
 import 'wishlist_page_user.dart';
 import 'menu_page_user.dart';
 import 'view_brand_page_user.dart';
+import 'view_all_brands.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Brand Model
@@ -333,7 +334,12 @@ class _HomeContentState extends State<HomeContent> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Navigate to all brands
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ViewAllBrands(),
+                      ),
+                    );
                   },
                   child: const Text('View All Brands'),
                 ),
