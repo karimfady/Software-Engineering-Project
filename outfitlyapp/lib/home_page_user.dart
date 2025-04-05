@@ -17,6 +17,27 @@ class Brand {
   }
 }
 
+// Product Model
+class Product {
+  final String productName;
+  final double price;
+  final String picture;
+
+  Product({
+    required this.productName,
+    required this.price,
+    required this.picture,
+  });
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      productName: json['product_name'] ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      picture: json['picture'] ?? '',
+    );
+  }
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -97,12 +118,15 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   List<Brand> brands = [];
+  List<Product> products = [];
   bool isLoading = true;
+  bool isLoadingProducts = true;
 
   @override
   void initState() {
     super.initState();
     fetchBrands();
+    fetchProducts();
   }
 
   Future<void> fetchBrands() async {
@@ -134,6 +158,42 @@ class _HomeContentState extends State<HomeContent> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error loading brands: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> fetchProducts() async {
+    final supabase = Supabase.instance.client;
+    try {
+      print('Fetching products...');
+      final List<dynamic> response = await supabase.from('Product').select();
+      print('Products response: $response');
+
+      setState(() {
+        products =
+            response.map((product) => Product.fromJson(product)).toList();
+        print('Processed products: ${products.length}');
+        // Print each product's details for debugging
+        products.forEach((product) {
+          print('Product: ${product.productName}');
+          print('Price: ${product.price}');
+          print('Picture URL: ${product.picture}');
+          print('---');
+        });
+        isLoadingProducts = false;
+      });
+    } catch (e) {
+      print('Error fetching products: $e');
+      setState(() {
+        isLoadingProducts = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading products: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -198,28 +258,9 @@ class _HomeContentState extends State<HomeContent> {
                                         borderRadius: BorderRadius.circular(40),
                                         child: Image.network(
                                           brand.brandLogo,
-                                          fit: BoxFit.cover,
-                                          loadingBuilder: (
-                                            context,
-                                            child,
-                                            loadingProgress,
-                                          ) {
-                                            if (loadingProgress == null)
-                                              return child;
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value:
-                                                    loadingProgress
-                                                                .expectedTotalBytes !=
-                                                            null
-                                                        ? loadingProgress
-                                                                .cumulativeBytesLoaded /
-                                                            loadingProgress
-                                                                .expectedTotalBytes!
-                                                        : null,
-                                              ),
-                                            );
-                                          },
+                                          fit: BoxFit.contain,
+                                          width: 70,
+                                          height: 70,
                                           errorBuilder: (
                                             context,
                                             error,
@@ -228,6 +269,19 @@ class _HomeContentState extends State<HomeContent> {
                                             return const Icon(
                                               Icons.store,
                                               size: 40,
+                                            );
+                                          },
+                                          loadingBuilder: (
+                                            context,
+                                            child,
+                                            loadingProgress,
+                                          ) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
                                             );
                                           },
                                         ),
@@ -265,8 +319,51 @@ class _HomeContentState extends State<HomeContent> {
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                   ),
-                  itemCount: 4, // Replace with actual product count
+                  itemCount: isLoadingProducts ? 4 : products.length,
                   itemBuilder: (context, index) {
+                    if (isLoadingProducts) {
+                      return Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(4),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 100,
+                                    color: Colors.grey[200],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Container(
+                                    height: 16,
+                                    width: 60,
+                                    color: Colors.grey[200],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    final product = products[index];
                     return Card(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,8 +376,44 @@ class _HomeContentState extends State<HomeContent> {
                                   top: Radius.circular(4),
                                 ),
                               ),
-                              child: const Center(
-                                child: Icon(Icons.image, size: 40),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(4),
+                                ),
+                                child: Image.network(
+                                  product.picture,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    print('Error loading image: $error');
+                                    print('Image URL: ${product.picture}');
+                                    return const Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.image, size: 40),
+                                          SizedBox(height: 8),
+                                          Text('Failed to load image'),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  loadingBuilder: (
+                                    context,
+                                    child,
+                                    loadingProgress,
+                                  ) {
+                                    if (loadingProgress == null) return child;
+                                    print('Loading image: ${product.picture}');
+                                    print(
+                                      'Progress: ${loadingProgress.cumulativeBytesLoaded} / ${loadingProgress.expectedTotalBytes}',
+                                    );
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -290,12 +423,20 @@ class _HomeContentState extends State<HomeContent> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Product ${index + 1}',
+                                  product.productName,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                const Text('\$99.99'),
+                                Text(
+                                  '\$${product.price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
