@@ -133,6 +133,7 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
                                         category: product.category,
                                         typeOfClothing: product.typeOfClothing,
                                         sizes: product.sizes,
+                                        id: product.id,
                                       ),
                                 ),
                               );

@@ -31,6 +31,7 @@ class Product {
   final String category;
   final String typeOfClothing;
   final List<String> sizes;
+  final String id;
 
   Product({
     required this.productName,
@@ -41,6 +42,7 @@ class Product {
     required this.category,
     required this.typeOfClothing,
     required this.sizes,
+    required this.id,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -71,6 +73,21 @@ class Product {
       }
     }
 
+    // Handle id field
+    String productId = '';
+    if (json['id'] != null) {
+      if (json['id'] is int) {
+        productId = json['id'].toString();
+      } else if (json['id'] is String) {
+        productId = json['id'];
+      }
+    }
+
+    print('Creating Product from JSON:');
+    print('ID: $productId');
+    print('Product Name: ${json['product_name']}');
+    print('Price: ${json['price']}');
+
     return Product(
       productName: json['product_name'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
@@ -80,6 +97,7 @@ class Product {
       category: json['category'] ?? '',
       typeOfClothing: json['type_of_clothing'] ?? '',
       sizes: sizesList,
+      id: productId,
     );
   }
 }
@@ -215,21 +233,25 @@ class _HomeContentState extends State<HomeContent> {
     final supabase = Supabase.instance.client;
     try {
       print('Fetching products...');
-      final List<dynamic> response = await supabase.from('Product').select();
-      print('Products response: $response');
+      final List<dynamic> response = await supabase
+          .from('Product')
+          .select(
+            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size',
+          );
+      print('Raw response from Supabase: $response');
 
       setState(() {
         products =
             response.map((product) {
-              print('Raw product data: $product');
-              print('Sizes data type: ${product['sizes']?.runtimeType}');
-              print('Sizes value: ${product['sizes']}');
+              print('Processing product: $product');
+              print('Product ID: ${product['id']}');
               return Product.fromJson(product);
             }).toList();
         print('Processed products: ${products.length}');
         // Print each product's details for debugging
         products.forEach((product) {
           print('Product: ${product.productName}');
+          print('ID: ${product.id}');
           print('Price: ${product.price}');
           print('Picture URL: ${product.picture}');
           print('Sizes: ${product.sizes}');
@@ -454,6 +476,7 @@ class _HomeContentState extends State<HomeContent> {
                                   category: product.category,
                                   typeOfClothing: product.typeOfClothing,
                                   sizes: product.sizes,
+                                  id: product.id,
                                 ),
                           ),
                         );

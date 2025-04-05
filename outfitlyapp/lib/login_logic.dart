@@ -5,6 +5,8 @@ import 'register_page.dart';
 import 'home_page_user.dart';
 
 class LoginLogic {
+  static String? loggedInUserEmail; // Static variable to track logged-in user
+
   Future<void> handleLogin(
     String email,
     String password,
@@ -20,12 +22,13 @@ class LoginLogic {
       //incorrect print passwrod is incorrect
 
       try {
+        // Check credentials
         final response =
             await Supabase.instance.client
-                .from('User') // 👈 use your exact table name
+                .from('User')
                 .select("*")
                 .eq('email', email)
-                .maybeSingle(); // fetches at most 1 row, returns null if none
+                .maybeSingle();
 
         if (response == null) {
           print("No user found with that email.");
@@ -37,8 +40,10 @@ class LoginLogic {
 
         if (storedPassword == password) {
           print("Login successful!");
-          // Navigate to next screen, save session, etc.
+          // Set the logged-in user
+          loggedInUserEmail = email;
 
+          // Navigate to next screen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
@@ -50,6 +55,21 @@ class LoginLogic {
         print("Login error: $e");
       }
     }
+  }
+
+  // Add a method to check if a user is logged in
+  static bool isUserLoggedIn() {
+    return loggedInUserEmail != null;
+  }
+
+  // Add a method to get the logged-in user's email
+  static String? getLoggedInUserEmail() {
+    return loggedInUserEmail;
+  }
+
+  // Add a method to log out
+  static void logout() {
+    loggedInUserEmail = null;
   }
 
   Future<void> handleregisteration(

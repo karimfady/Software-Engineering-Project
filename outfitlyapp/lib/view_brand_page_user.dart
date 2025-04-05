@@ -151,6 +151,7 @@ class _BrandPageState extends State<BrandPage> {
                                           typeOfClothing:
                                               product.typeOfClothing,
                                           sizes: product.sizes,
+                                          id: product.id,
                                         ),
                                   ),
                                 );

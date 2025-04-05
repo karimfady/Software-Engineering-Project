@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_page_user.dart'; // For the Product model
+import 'login_logic.dart'; // Import the LoginLogic class
 
 class ProductPage extends StatefulWidget {
   final String productName;
@@ -11,6 +12,7 @@ class ProductPage extends StatefulWidget {
   final String category;
   final String typeOfClothing;
   final List<String> sizes;
+  final String id;
 
   const ProductPage({
     Key? key,
@@ -22,6 +24,7 @@ class ProductPage extends StatefulWidget {
     required this.category,
     required this.typeOfClothing,
     required this.sizes,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -130,11 +133,31 @@ class _ProductPageState extends State<ProductPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton.icon(
-                onPressed: () {
-                  // Wishlist functionality will be implemented later
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Added to wishlist!')),
-                  );
+                onPressed: () async {
+                  try {
+                    final supabase = Supabase.instance.client;
+
+                    // Check if user is logged in using the LoginLogic class
+                    if (!LoginLogic.isUserLoggedIn()) {
+                      // Navigate to login page
+                      if (!mounted) return;
+                      Navigator.pushNamed(context, '/login').then((_) {
+                        // After returning from login page, try adding to wishlist again
+                        if (LoginLogic.isUserLoggedIn()) {
+                          _addToWishlist(LoginLogic.getLoggedInUserEmail()!);
+                        }
+                      });
+                      return;
+                    }
+
+                    _addToWishlist(LoginLogic.getLoggedInUserEmail()!);
+                  } catch (e) {
+                    print('Error adding to wishlist: $e');
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${e.toString()}')),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.favorite_border),
                 label: const Text('Add to Wishlist'),
@@ -178,5 +201,66 @@ class _ProductPageState extends State<ProductPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _addToWishlist(String userEmail) async {
+    try {
+      print('Adding to wishlist:');
+      print('User email: $userEmail');
+      print('Product ID: ${widget.id}');
+      print('Price: ${widget.price}');
+
+      // First, get the user's username from the User table
+      final userResponse =
+          await Supabase.instance.client
+              .from('User')
+              .select('user_name')
+              .eq('email', userEmail)
+              .single();
+
+      if (userResponse == null) {
+        print('User not found with email: $userEmail');
+        if (!mounted) return;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Error: User not found')));
+        return;
+      }
+
+      final username = userResponse['user_name'];
+      print('Found username: $username');
+
+      // Convert price to integer (remove decimal places)
+      final int priceInCents = (widget.price * 100).round();
+
+      // Insert into wishlist table
+      final response =
+          await Supabase.instance.client.from('wishlist').insert({
+            'customer_username': username, // Use username instead of email
+            'product_id': widget.id,
+            'price': priceInCents,
+          }).select();
+
+      print('Wishlist insert response: $response');
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Added to wishlist!')));
+    } catch (e) {
+      print('Error adding to wishlist: $e');
+      print('Error type: ${e.runtimeType}');
+      if (e is PostgrestException) {
+        print('Postgrest error details:');
+        print('Message: ${e.message}');
+        print('Code: ${e.code}');
+        print('Details: ${e.details}');
+        print('Hint: ${e.hint}');
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+    }
   }
 }
