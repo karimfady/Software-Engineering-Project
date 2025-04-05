@@ -4,7 +4,9 @@ import 'shopping_cart_user.dart';
 import 'wishlist_page_user.dart';
 import 'menu_page_user.dart';
 import 'view_brand_page_user.dart';
+import 'view_product_page_user.dart';
 import 'view_all_brands.dart';
+import 'view_all_products.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Brand Model
@@ -24,11 +26,19 @@ class Product {
   final String productName;
   final double price;
   final String picture;
+  final String brandName;
+  final String color;
+  final List<String> tags;
+  final List<String> sizes;
 
   Product({
     required this.productName,
     required this.price,
     required this.picture,
+    required this.brandName,
+    required this.color,
+    required this.tags,
+    required this.sizes,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -53,6 +63,10 @@ class Product {
       productName: json['product_name'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       picture: decodedUrl,
+      brandName: json['brand_name'] ?? '',
+      color: json['color'] ?? '',
+      tags: List<String>.from(json['tags'] ?? []),
+      sizes: List<String>.from(json['sizes'] ?? []),
     );
   }
 }
@@ -406,90 +420,116 @@ class _HomeContentState extends State<HomeContent> {
                     }
 
                     final product = products[index];
-                    return Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(4),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => ProductPage(
+                                  productName: product.productName,
+                                  picture: product.picture,
+                                  price: product.price,
+                                  brandName: product.brandName,
+                                  color: product.color,
+                                  tags: product.tags,
+                                  sizes: product.sizes,
                                 ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(4),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(4),
+                                  ),
                                 ),
-                                child: Image.network(
-                                  product.picture,
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    print('Error loading image: $error');
-                                    print('Image URL: ${product.picture}');
-                                    return const Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.image, size: 40),
-                                          SizedBox(height: 8),
-                                          Text('Failed to load image'),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  loadingBuilder: (
-                                    context,
-                                    child,
-                                    loadingProgress,
-                                  ) {
-                                    if (loadingProgress == null) return child;
-                                    print('Loading image: ${product.picture}');
-                                    print(
-                                      'Progress: ${loadingProgress.cumulativeBytesLoaded} / ${loadingProgress.expectedTotalBytes}',
-                                    );
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  },
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(4),
+                                  ),
+                                  child: Image.network(
+                                    product.picture,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      print('Error loading image: $error');
+                                      print('Image URL: ${product.picture}');
+                                      return const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.image, size: 40),
+                                            SizedBox(height: 8),
+                                            Text('Failed to load image'),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    loadingBuilder: (
+                                      context,
+                                      child,
+                                      loadingProgress,
+                                    ) {
+                                      if (loadingProgress == null) return child;
+                                      print(
+                                        'Loading image: ${product.picture}',
+                                      );
+                                      print(
+                                        'Progress: ${loadingProgress.cumulativeBytesLoaded} / ${loadingProgress.expectedTotalBytes}',
+                                      );
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.productName,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.productName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '\$${product.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
+                                  Text(
+                                    '\$${product.price.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
                 TextButton(
                   onPressed: () {
-                    // Navigate to all products
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ViewAllProducts(),
+                      ),
+                    );
                   },
                   child: const Text('View All Products'),
                 ),
