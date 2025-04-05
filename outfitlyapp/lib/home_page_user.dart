@@ -3,6 +3,7 @@ import 'shop_page_user.dart';
 import 'shopping_cart_user.dart';
 import 'wishlist_page_user.dart';
 import 'menu_page_user.dart';
+import 'view_brand_page_user.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Brand Model
@@ -30,10 +31,27 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    // Decode the hex-encoded URL
+    String decodedUrl = json['picture'] ?? '';
+    if (decodedUrl.startsWith('\\x')) {
+      try {
+        // Remove the \x prefix and convert hex to string
+        String hexString = decodedUrl.substring(2);
+        List<int> bytes = [];
+        for (int i = 0; i < hexString.length; i += 2) {
+          String hexByte = hexString.substring(i, i + 2);
+          bytes.add(int.parse(hexByte, radix: 16));
+        }
+        decodedUrl = String.fromCharCodes(bytes);
+      } catch (e) {
+        print('Error decoding URL: $e');
+      }
+    }
+
     return Product(
       productName: json['product_name'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      picture: json['picture'] ?? '',
+      picture: decodedUrl,
     );
   }
 }
@@ -245,51 +263,69 @@ class _HomeContentState extends State<HomeContent> {
                               final brand = brands[index];
                               return Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(40),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => BrandPage(
+                                              brandName: brand.brandName,
+                                              brandLogo: brand.brandLogo,
+                                            ),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: Image.network(
-                                          brand.brandLogo,
-                                          fit: BoxFit.contain,
-                                          width: 70,
-                                          height: 70,
-                                          errorBuilder: (
-                                            context,
-                                            error,
-                                            stackTrace,
-                                          ) {
-                                            return const Icon(
-                                              Icons.store,
-                                              size: 40,
-                                            );
-                                          },
-                                          loadingBuilder: (
-                                            context,
-                                            child,
-                                            loadingProgress,
-                                          ) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          },
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(
+                                            40,
+                                          ),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            40,
+                                          ),
+                                          child: Image.network(
+                                            brand.brandLogo,
+                                            fit: BoxFit.contain,
+                                            width: 70,
+                                            height: 70,
+                                            errorBuilder: (
+                                              context,
+                                              error,
+                                              stackTrace,
+                                            ) {
+                                              return const Icon(
+                                                Icons.store,
+                                                size: 40,
+                                              );
+                                            },
+                                            loadingBuilder: (
+                                              context,
+                                              child,
+                                              loadingProgress,
+                                            ) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(brand.brandName),
-                                  ],
+                                      const SizedBox(height: 8),
+                                      Text(brand.brandName),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
