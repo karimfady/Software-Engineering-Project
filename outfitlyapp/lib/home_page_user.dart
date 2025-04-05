@@ -11,13 +11,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Brand Model
 class Brand {
-  final String brandName;
-  final String brandLogo;
+  final String name;
+  final String logo;
 
-  Brand({required this.brandName, required this.brandLogo});
+  Brand({required this.name, required this.logo});
 
   factory Brand.fromJson(Map<String, dynamic> json) {
-    return Brand(brandName: json['name'] ?? '', brandLogo: json['logo'] ?? '');
+    return Brand(name: json['name'] ?? '', logo: json['logo'] ?? '');
   }
 }
 
@@ -28,7 +28,8 @@ class Product {
   final String picture;
   final String brandName;
   final String color;
-  final List<String> tags;
+  final String category;
+  final String typeOfClothing;
   final List<String> sizes;
 
   Product({
@@ -37,7 +38,8 @@ class Product {
     required this.picture,
     required this.brandName,
     required this.color,
-    required this.tags,
+    required this.category,
+    required this.typeOfClothing,
     required this.sizes,
   });
 
@@ -59,14 +61,25 @@ class Product {
       }
     }
 
+    // Handle sizes array
+    List<String> sizesList = [];
+    if (json['size'] != null) {
+      if (json['size'] is List) {
+        sizesList = List<String>.from(
+          json['size'].map((size) => size.toString()),
+        );
+      }
+    }
+
     return Product(
       productName: json['product_name'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       picture: decodedUrl,
       brandName: json['brand_name'] ?? '',
       color: json['color'] ?? '',
-      tags: List<String>.from(json['tags'] ?? []),
-      sizes: List<String>.from(json['sizes'] ?? []),
+      category: json['category'] ?? '',
+      typeOfClothing: json['type_of_clothing'] ?? '',
+      sizes: sizesList,
     );
   }
 }
@@ -177,7 +190,7 @@ class _HomeContentState extends State<HomeContent> {
         brands = response.map((brand) => Brand.fromJson(brand)).toList();
         print('Processed brands: ${brands.length}');
         brands.forEach((brand) {
-          print('Brand: ${brand.brandName}, Logo: ${brand.brandLogo}');
+          print('Brand: ${brand.name}, Logo: ${brand.logo}');
         });
         isLoading = false;
       });
@@ -207,13 +220,19 @@ class _HomeContentState extends State<HomeContent> {
 
       setState(() {
         products =
-            response.map((product) => Product.fromJson(product)).toList();
+            response.map((product) {
+              print('Raw product data: $product');
+              print('Sizes data type: ${product['sizes']?.runtimeType}');
+              print('Sizes value: ${product['sizes']}');
+              return Product.fromJson(product);
+            }).toList();
         print('Processed products: ${products.length}');
         // Print each product's details for debugging
         products.forEach((product) {
           print('Product: ${product.productName}');
           print('Price: ${product.price}');
           print('Picture URL: ${product.picture}');
+          print('Sizes: ${product.sizes}');
           print('---');
         });
         isLoadingProducts = false;
@@ -285,8 +304,8 @@ class _HomeContentState extends State<HomeContent> {
                                       MaterialPageRoute(
                                         builder:
                                             (context) => BrandPage(
-                                              brandName: brand.brandName,
-                                              brandLogo: brand.brandLogo,
+                                              brandName: brand.name,
+                                              brandLogo: brand.logo,
                                             ),
                                       ),
                                     );
@@ -307,7 +326,7 @@ class _HomeContentState extends State<HomeContent> {
                                             40,
                                           ),
                                           child: Image.network(
-                                            brand.brandLogo,
+                                            brand.logo,
                                             fit: BoxFit.contain,
                                             width: 70,
                                             height: 70,
@@ -338,7 +357,7 @@ class _HomeContentState extends State<HomeContent> {
                                         ),
                                       ),
                                       const SizedBox(height: 8),
-                                      Text(brand.brandName),
+                                      Text(brand.name),
                                     ],
                                   ),
                                 ),
@@ -432,7 +451,8 @@ class _HomeContentState extends State<HomeContent> {
                                   price: product.price,
                                   brandName: product.brandName,
                                   color: product.color,
-                                  tags: product.tags,
+                                  category: product.category,
+                                  typeOfClothing: product.typeOfClothing,
                                   sizes: product.sizes,
                                 ),
                           ),

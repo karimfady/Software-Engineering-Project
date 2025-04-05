@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_page_user.dart';
+import 'view_product_page_user.dart';
 
 class BrandPage extends StatefulWidget {
   final String brandName;
@@ -14,7 +15,7 @@ class BrandPage extends StatefulWidget {
 }
 
 class _BrandPageState extends State<BrandPage> {
-  List<Product> products = [];
+  List<Product> brandProducts = [];
   bool isLoading = true;
 
   @override
@@ -26,16 +27,25 @@ class _BrandPageState extends State<BrandPage> {
   Future<void> fetchBrandProducts() async {
     final supabase = Supabase.instance.client;
     try {
-      print('Fetching products for ${widget.brandName}...');
+      print('Fetching products for brand: ${widget.brandName}');
       final List<dynamic> response = await supabase
           .from('Product')
           .select()
           .eq('brand_name', widget.brandName);
+      print('Response from Supabase: $response');
 
       setState(() {
-        products =
+        brandProducts =
             response.map((product) => Product.fromJson(product)).toList();
-        print('Found ${products.length} products for ${widget.brandName}');
+        print('Processed products: ${brandProducts.length}');
+        // Print each product's details for debugging
+        brandProducts.forEach((product) {
+          print('Product: ${product.productName}');
+          print('Price: ${product.price}');
+          print('Picture URL: ${product.picture}');
+          print('Sizes: ${product.sizes}');
+          print('---');
+        });
         isLoading = false;
       });
     } catch (e) {
@@ -122,84 +132,105 @@ class _BrandPageState extends State<BrandPage> {
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
                               ),
-                          itemCount: products.length,
+                          itemCount: brandProducts.length,
                           itemBuilder: (context, index) {
-                            final product = products[index];
-                            return Card(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                              top: Radius.circular(4),
-                                            ),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                              top: Radius.circular(4),
-                                            ),
-                                        child: Image.network(
-                                          product.picture,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          errorBuilder: (
-                                            context,
-                                            error,
-                                            stackTrace,
-                                          ) {
-                                            return const Center(
-                                              child: Icon(
-                                                Icons.image,
-                                                size: 40,
+                            final product = brandProducts[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => ProductPage(
+                                          productName: product.productName,
+                                          picture: product.picture,
+                                          price: product.price,
+                                          brandName: product.brandName,
+                                          color: product.color,
+                                          category: product.category,
+                                          typeOfClothing:
+                                              product.typeOfClothing,
+                                          sizes: product.sizes,
+                                        ),
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(4),
                                               ),
-                                            );
-                                          },
-                                          loadingBuilder: (
-                                            context,
-                                            child,
-                                            loadingProgress,
-                                          ) {
-                                            if (loadingProgress == null)
-                                              return child;
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          },
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(4),
+                                              ),
+                                          child: Image.network(
+                                            product.picture,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            errorBuilder: (
+                                              context,
+                                              error,
+                                              stackTrace,
+                                            ) {
+                                              return const Center(
+                                                child: Icon(
+                                                  Icons.image,
+                                                  size: 40,
+                                                ),
+                                              );
+                                            },
+                                            loadingBuilder: (
+                                              context,
+                                              child,
+                                              loadingProgress,
+                                            ) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          product.productName,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            product.productName,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          '\$${product.price.toStringAsFixed(2)}',
-                                          style: const TextStyle(
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.bold,
+                                          Text(
+                                            '\$${product.price.toStringAsFixed(2)}',
+                                            style: const TextStyle(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

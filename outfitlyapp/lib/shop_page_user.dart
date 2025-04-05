@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'view_all_brands.dart';
+import 'view_all_products.dart';
 
 class ShopPage extends StatelessWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -23,7 +26,12 @@ class ShopPage extends StatelessWidget {
                 subtitle: const Text('Browse through all available brands'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to all brands page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ViewAllBrands(),
+                    ),
+                  );
                 },
               ),
             ),
@@ -39,7 +47,12 @@ class ShopPage extends StatelessWidget {
                 subtitle: const Text('Browse through all available products'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to all products page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ViewAllProducts(),
+                    ),
+                  );
                 },
               ),
             ),

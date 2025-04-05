@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'view_brand_page_user.dart';
-import 'home_page_user.dart'; // For the Brand model
+import 'home_page_user.dart';
+import 'view_product_page_user.dart';
 
 class ViewAllBrands extends StatefulWidget {
   const ViewAllBrands({Key? key}) : super(key: key);
@@ -23,12 +24,20 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
   Future<void> fetchBrands() async {
     final supabase = Supabase.instance.client;
     try {
-      print('Fetching all brands...');
-      final List<dynamic> response = await supabase.from('Brand').select();
+      print('Fetching brands...');
+      final List<dynamic> response = await supabase
+          .from('Brand')
+          .select()
+          .order('name'); // Order by name alphabetically
+      print('Response from Supabase: $response');
 
       setState(() {
         brands = response.map((brand) => Brand.fromJson(brand)).toList();
-        print('Fetched ${brands.length} brands');
+        print('Processed brands: ${brands.length}');
+        // Print each brand's details for debugging
+        brands.forEach((brand) {
+          print('Brand: ${brand.name}, Logo: ${brand.logo}');
+        });
         isLoading = false;
       });
     } catch (e) {
@@ -80,8 +89,8 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                           MaterialPageRoute(
                             builder:
                                 (context) => BrandPage(
-                                  brandName: brand.brandName,
-                                  brandLogo: brand.brandLogo,
+                                  brandName: brand.name,
+                                  brandLogo: brand.logo,
                                 ),
                           ),
                         );
@@ -104,7 +113,7 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(50),
                                 child: Image.network(
-                                  brand.brandLogo,
+                                  brand.logo,
                                   fit: BoxFit.contain,
                                   width: 90,
                                   height: 90,
@@ -126,7 +135,7 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              brand.brandName,
+                              brand.name,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

@@ -12,7 +12,11 @@ class ViewAllProducts extends StatefulWidget {
 
 class _ViewAllProductsState extends State<ViewAllProducts> {
   List<Product> products = [];
+  List<Product> filteredProducts = [];
   bool isLoading = true;
+  String selectedCategory = 'All';
+
+  final List<String> categories = ['All', 'Tops', 'Bottoms', 'Accessories'];
 
   @override
   void initState() {
@@ -29,6 +33,7 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
       setState(() {
         products =
             response.map((product) => Product.fromJson(product)).toList();
+        filteredProducts = products;
         print('Fetched ${products.length} products');
         isLoading = false;
       });
@@ -48,6 +53,18 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
     }
   }
 
+  void filterProducts(String category) {
+    setState(() {
+      selectedCategory = category;
+      if (category == 'All') {
+        filteredProducts = products;
+      } else {
+        filteredProducts =
+            products.where((product) => product.category == category).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,113 +75,156 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
         ),
         centerTitle: true,
       ),
-      body: RefreshIndicator(
-        onRefresh: fetchProducts,
-        child:
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => ProductPage(
-                                  productName: product.productName,
-                                  picture: product.picture,
-                                  price: product.price,
-                                  brandName: product.brandName,
-                                  color: product.color,
-                                  tags: product.tags,
-                                  sizes: product.sizes,
-                                ),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(12),
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(12),
-                                  ),
-                                  child: Image.network(
-                                    product.picture,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const Center(
-                                        child: Icon(Icons.image, size: 40),
-                                      );
-                                    },
-                                    loadingBuilder: (
-                                      context,
-                                      child,
-                                      loadingProgress,
-                                    ) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
+      body: Column(
+        children: [
+          // Category Filter
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children:
+                  categories.map((category) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(category),
+                        selected: selectedCategory == category,
+                        onSelected: (selected) {
+                          if (selected) {
+                            filterProducts(category);
+                          }
+                        },
+                      ),
+                    );
+                  }).toList(),
+            ),
+          ),
+          // Products Grid
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: fetchProducts,
+              child:
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = filteredProducts[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => ProductPage(
+                                        productName: product.productName,
+                                        picture: product.picture,
+                                        price: product.price,
+                                        brandName: product.brandName,
+                                        color: product.color,
+                                        category: product.category,
+                                        typeOfClothing: product.typeOfClothing,
+                                        sizes: product.sizes,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    product.productName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                              top: Radius.circular(12),
+                                            ),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                              top: Radius.circular(12),
+                                            ),
+                                        child: Image.network(
+                                          product.picture,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
+                                            return const Center(
+                                              child: Icon(
+                                                Icons.image,
+                                                size: 40,
+                                              ),
+                                            );
+                                          },
+                                          loadingBuilder: (
+                                            context,
+                                            child,
+                                            loadingProgress,
+                                          ) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '\$${product.price.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product.productName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          '\$${product.price.toStringAsFixed(2)}',
+                                          style: const TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+            ),
+          ),
+        ],
       ),
     );
   }

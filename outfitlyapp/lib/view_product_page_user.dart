@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'home_page_user.dart'; // For the Product model
 
 class ProductPage extends StatefulWidget {
   final String productName;
@@ -7,7 +8,8 @@ class ProductPage extends StatefulWidget {
   final double price;
   final String brandName;
   final String color;
-  final List<String> tags;
+  final String category;
+  final String typeOfClothing;
   final List<String> sizes;
 
   const ProductPage({
@@ -17,7 +19,8 @@ class ProductPage extends StatefulWidget {
     required this.price,
     required this.brandName,
     required this.color,
-    required this.tags,
+    required this.category,
+    required this.typeOfClothing,
     required this.sizes,
   }) : super(key: key);
 
@@ -77,29 +80,6 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Size Selection
-                  const Text(
-                    'Select Size',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children:
-                        widget.sizes.map((size) {
-                          return ChoiceChip(
-                            label: Text(size),
-                            selected: selectedSize == size,
-                            onSelected: (selected) {
-                              setState(() {
-                                selectedSize = selected ? size : null;
-                              });
-                            },
-                          );
-                        }).toList(),
-                  ),
-                  const SizedBox(height: 24),
-
                   // Description Section
                   const Text(
                     'Description',
@@ -108,22 +88,35 @@ class _ProductPageState extends State<ProductPage> {
                   const SizedBox(height: 16),
                   _buildInfoRow('Brand', widget.brandName),
                   _buildInfoRow('Color', widget.color),
-                  const SizedBox(height: 8),
+                  _buildInfoRow('Category', widget.category),
+                  _buildInfoRow('Type', widget.typeOfClothing),
+                  const SizedBox(height: 24),
+
+                  // Size Selection
                   const Text(
-                    'Tags',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    'Select Size',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children:
-                        widget.tags.map((tag) {
-                          return Chip(
-                            label: Text(tag),
-                            backgroundColor: Colors.grey[200],
-                          );
-                        }).toList(),
-                  ),
+                  if (widget.sizes.isEmpty)
+                    const Text('No sizes available')
+                  else
+                    Wrap(
+                      spacing: 8,
+                      children:
+                          widget.sizes.map((size) {
+                            return ChoiceChip(
+                              label: Text(size),
+                              selected: selectedSize == size,
+                              onSelected: (selected) {
+                                setState(() {
+                                  selectedSize = selected ? size : null;
+                                });
+                              },
+                            );
+                          }).toList(),
+                    ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
