@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outfitlyapp/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'wishlist_page_user.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: LoginPage(),
+      routes: {'/wishlist': (context) => const WishlistPage()},
       debugShowCheckedModeBanner: false,
     );
   }
