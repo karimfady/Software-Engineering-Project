@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_page_user.dart'; // For the Product model
 import 'login_logic.dart'; // Import the LoginLogic class
 import 'wishlist_state.dart';
+import 'cart_state.dart'; // Add this import
 
 class ProductPage extends StatefulWidget {
   final String productName;
@@ -203,6 +204,36 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  Future<void> _addToCart() async {
+    try {
+      // Convert price to cents
+      final priceInCents = (widget.price * 100).round();
+
+      await CartState().addToCart(
+        productId: widget.id,
+        quantity: quantity,
+        size: selectedSize!,
+        pricePerItem: priceInCents,
+      );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added $quantity item(s) to cart!'),
+          action: SnackBarAction(
+            label: 'View Cart',
+            onPressed: () {
+              Navigator.pushNamed(context, '/cart');
+            },
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error adding to cart: $e');
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -395,13 +426,27 @@ class _ProductPageState extends State<ProductPage> {
                 onPressed:
                     selectedSize == null
                         ? null
-                        : () {
-                          // Add to cart functionality will be implemented later
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Added $quantity item(s) to cart!'),
-                            ),
-                          );
+                        : () async {
+                          try {
+                            if (!LoginLogic.isUserLoggedIn()) {
+                              // Navigate to login page
+                              if (!mounted) return;
+                              Navigator.pushNamed(context, '/login').then((_) {
+                                // After returning from login page, try adding to cart again
+                                if (LoginLogic.isUserLoggedIn()) {
+                                  _addToCart();
+                                }
+                              });
+                              return;
+                            }
+
+                            await _addToCart();
+                          } catch (e) {
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error: ${e.toString()}')),
+                            );
+                          }
                         },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),

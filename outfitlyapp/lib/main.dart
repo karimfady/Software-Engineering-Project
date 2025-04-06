@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:outfitlyapp/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'wishlist_page_user.dart';
+import 'shopping_cart_user.dart';
+import 'orders_page.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -24,7 +26,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: LoginPage(),
-      routes: {'/wishlist': (context) => const WishlistPage()},
+      routes: {
+        '/wishlist': (context) => const WishlistPage(),
+        '/cart': (context) => const CartPage(),
+        '/orders': (context) => const OrdersPage(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

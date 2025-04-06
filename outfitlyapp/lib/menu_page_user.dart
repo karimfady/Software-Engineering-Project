@@ -37,11 +37,10 @@ class _MenuPageState extends State<MenuPage> {
                 ),
                 const Divider(),
                 ListTile(
-                  leading: const Icon(Icons.shopping_bag),
+                  leading: const Icon(Icons.shopping_bag_outlined),
                   title: const Text('My Orders'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    // Navigate to orders page
+                    Navigator.pushNamed(context, '/orders');
                   },
                 ),
               ],
