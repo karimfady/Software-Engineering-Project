@@ -35,6 +35,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   String? selectedSize;
   bool isInWishlist = false;
+  int quantity = 1;
 
   @override
   void initState() {
@@ -288,6 +289,50 @@ class _ProductPageState extends State<ProductPage> {
                           }).toList(),
                     ),
                   const SizedBox(height: 24),
+
+                  // Quantity Selection
+                  const Text(
+                    'Quantity',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        onPressed: () {
+                          if (quantity > 1) {
+                            setState(() {
+                              quantity--;
+                            });
+                          }
+                        },
+                      ),
+                      Container(
+                        width: 50,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Center(
+                          child: Text(
+                            quantity.toString(),
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            quantity++;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -353,7 +398,9 @@ class _ProductPageState extends State<ProductPage> {
                         : () {
                           // Add to cart functionality will be implemented later
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to cart!')),
+                            SnackBar(
+                              content: Text('Added $quantity item(s) to cart!'),
+                            ),
                           );
                         },
                 style: ElevatedButton.styleFrom(
