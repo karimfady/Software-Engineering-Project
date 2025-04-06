@@ -19,11 +19,19 @@ class _OrdersPageState extends State<OrdersPage> {
     _loadOrders();
   }
 
+  @override
+  void dispose() {
+    // Clean up any resources here
+    super.dispose();
+  }
+
   Future<void> _loadOrders() async {
     if (!LoginLogic.isUserLoggedIn()) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       return;
     }
 
@@ -39,9 +47,11 @@ class _OrdersPageState extends State<OrdersPage> {
               .single();
 
       if (userResponse == null) {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
         return;
       }
 
@@ -53,7 +63,7 @@ class _OrdersPageState extends State<OrdersPage> {
           .select('''
             order_id,
             status,
-            created_at,
+            order_date,
             country,
             city,
             street,
@@ -73,7 +83,7 @@ class _OrdersPageState extends State<OrdersPage> {
             )
           ''')
           .eq('customer_username', username)
-          .order('created_at', ascending: false);
+          .order('order_date', ascending: false);
 
       if (mounted) {
         setState(() {
@@ -200,7 +210,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text('Date: ${order['created_at']}'),
+                                Text('Date: ${order['order_date']}'),
                                 Text('Status: ${order['status']}'),
                                 const SizedBox(height: 16),
                                 const Text(
