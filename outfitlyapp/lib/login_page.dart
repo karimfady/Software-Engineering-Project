@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_logic.dart';
 import 'register_page.dart';
+import 'search_page.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -58,6 +59,14 @@ class LoginPage extends StatelessWidget {
                       passwordController.text,
                       context,
                     );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const search_page(),
+                      ),
+                    );
+
                     /*
                     Navigator.pushReplacement(
                       context,
