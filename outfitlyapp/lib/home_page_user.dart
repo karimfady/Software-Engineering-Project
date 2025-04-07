@@ -185,12 +185,19 @@ class _HomeContentState extends State<HomeContent> {
   List<Product> products = [];
   bool isLoading = true;
   bool isLoadingProducts = true;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchBrands();
     fetchProducts();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchBrands() async {
@@ -284,14 +291,32 @@ class _HomeContentState extends State<HomeContent> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Search functionality will be implemented later
-            },
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              onChanged: (value) {
+                // Search functionality will be implemented later
+              },
+            ),
           ),
-        ],
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: fetchBrands,
