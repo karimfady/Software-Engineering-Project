@@ -8,6 +8,7 @@ import 'view_product_page_user.dart';
 import 'view_all_brands.dart';
 import 'view_all_products.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'search_page.dart';
 
 // Brand Model
 class Brand {
@@ -300,6 +301,13 @@ class _HomeContentState extends State<HomeContent> {
             ),
             child: TextField(
               controller: _searchController,
+              readOnly: true,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                );
+              },
               decoration: InputDecoration(
                 hintText: 'Search products...',
                 prefixIcon: const Icon(Icons.search),
@@ -311,9 +319,6 @@ class _HomeContentState extends State<HomeContent> {
                 fillColor: Colors.grey[200],
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              onChanged: (value) {
-                // Search functionality will be implemented later
-              },
             ),
           ),
         ),

@@ -70,14 +70,14 @@ class Product {
   }
 }
 
-class search_page extends StatefulWidget {
-  const search_page({Key? key}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<search_page> createState() => _search_page();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _search_page extends State<search_page> {
+class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
   List<Product> searchResults = [];
@@ -98,9 +98,7 @@ class _search_page extends State<search_page> {
     try {
       final List<dynamic> response = await supabase
           .from('Product')
-          .select(
-            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Tags',
-          )
+          .select()
           .filter('Tags', 'cs', '{$query}');
 
       final results = response.map((e) => Product.fromJson(e)).toList();
