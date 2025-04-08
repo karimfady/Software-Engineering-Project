@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'wishlist_page_user.dart';
 import 'shopping_cart_user.dart';
 import 'orders_page.dart';
+import 'profile_page.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       routes: {
         '/wishlist': (context) => const WishlistPage(),
+        '/profile': (context) => const ProfilePage(),
         '/cart': (context) => const CartPage(),
         '/orders': (context) => const OrdersPage(),
       },

@@ -29,10 +29,10 @@ class _MenuPageState extends State<MenuPage> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.person),
-                  title: const Text('Profile'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  title: const Text('My Profile'),
                   onTap: () {
-                    // Navigate to profile page
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/profile');
                   },
                 ),
                 const Divider(),
