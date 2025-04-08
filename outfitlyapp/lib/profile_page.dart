@@ -34,12 +34,11 @@ class _ProfilePageState extends State<ProfilePage> {
         return;
       }
 
-      final response =
-          await Supabase.instance.client
-              .from('User')
-              .select()
-              .eq('email', userEmail)
-              .single();
+      final response = await Supabase.instance.client
+          .from('User')
+          .select()
+          .eq('email', userEmail)
+          .single();
 
       setState(() {
         firstNameController.text = response['first_name'] ?? '';
@@ -86,9 +85,9 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     } catch (e) {
       print('Error updating profile: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error updating profile: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: $e')),
+      );
     }
   }
 
@@ -117,66 +116,44 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    buildTextField(
-                      'First Name',
-                      Icons.person,
-                      firstNameController,
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  buildTextField('First Name', Icons.person, firstNameController),
+                  const SizedBox(height: 16),
+                  buildTextField('Last Name', Icons.person_outline, lastNameController),
+                  const SizedBox(height: 16),
+                  buildTextField('Username', Icons.account_circle, usernameController),
+                  const SizedBox(height: 16),
+                  buildTextField('Email', Icons.email, emailController, enabled: false),
+                  const SizedBox(height: 16),
+                  buildTextField('Country', Icons.public, countryController),
+                  const SizedBox(height: 16),
+                  buildTextField('City', Icons.location_city, cityController),
+                  const SizedBox(height: 16),
+                  buildTextField('Street', Icons.streetview, streetController),
+                  const SizedBox(height: 16),
+                  buildTextField(
+                    'Postal Code',
+                    Icons.local_post_office,
+                    postalCodeController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _updateProfile,
+                    child: const Text('Update Profile'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    const SizedBox(height: 16),
-                    buildTextField(
-                      'Last Name',
-                      Icons.person_outline,
-                      lastNameController,
-                    ),
-                    const SizedBox(height: 16),
-                    buildTextField(
-                      'Username',
-                      Icons.account_circle,
-                      usernameController,
-                    ),
-                    const SizedBox(height: 16),
-                    buildTextField(
-                      'Email',
-                      Icons.email,
-                      emailController,
-                      enabled: false,
-                    ),
-                    const SizedBox(height: 16),
-                    buildTextField('Country', Icons.public, countryController),
-                    const SizedBox(height: 16),
-                    buildTextField('City', Icons.location_city, cityController),
-                    const SizedBox(height: 16),
-                    buildTextField(
-                      'Street',
-                      Icons.streetview,
-                      streetController,
-                    ),
-                    const SizedBox(height: 16),
-                    buildTextField(
-                      'Postal Code',
-                      Icons.local_post_office,
-                      postalCodeController,
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: _updateProfile,
-                      child: const Text('Update Profile'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
     );
   }
 
@@ -198,4 +175,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
+} 
