@@ -287,10 +287,7 @@ class _HomeContentState extends State<HomeContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Outfitly',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+        title: Image.asset('assets/images/logo.jpeg', height: 40),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
