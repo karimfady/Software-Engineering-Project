@@ -31,7 +31,6 @@ class _MenuPageState extends State<MenuPage> {
                   leading: const Icon(Icons.person),
                   title: const Text('My Profile'),
                   onTap: () {
-                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/profile');
                   },
                 ),
