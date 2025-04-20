@@ -3,10 +3,18 @@ import 'login_logic.dart';
 import 'register_page.dart';
 import 'home_page_user.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final LoginLogic loginLogic = LoginLogic();
+  String _accountType = 'customer'; // Default to customer account
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +66,35 @@ class LoginPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.lock),
               ),
             ),
+            SizedBox(height: 20),
+
+            // Account Type Selection
+            Card(
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: const Text('Customer Account'),
+                    value: 'customer',
+                    groupValue: _accountType,
+                    onChanged: (String? value) {
+                      setState(() {
+                        _accountType = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Brand Admin Account'),
+                    value: 'brand_admin',
+                    groupValue: _accountType,
+                    onChanged: (String? value) {
+                      setState(() {
+                        _accountType = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 30),
 
             // Login Button
@@ -65,16 +102,19 @@ class LoginPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  loginLogic.handleLogin(
-                    emailController.text.trim().toLowerCase(),
-                    passwordController.text,
-                    context,
-                  );
-
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
+                  if (_accountType == 'customer') {
+                    loginLogic.handleLogin(
+                      emailController.text.trim().toLowerCase(),
+                      passwordController.text,
+                      context,
+                    );
+                  } else {
+                    loginLogic.handleBrandAdminLogin(
+                      emailController.text.trim().toLowerCase(),
+                      passwordController.text,
+                      context,
+                    );
+                  }
                 },
                 child: Text('Login'),
                 style: ElevatedButton.styleFrom(

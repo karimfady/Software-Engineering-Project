@@ -12,48 +12,63 @@ class LoginLogic {
     String password,
     BuildContext context,
   ) async {
-    // Here you can connect to an API, validate fields, etc.
     if (email.isEmpty || password.isEmpty) {
-      print("Please fill in all fields.");
-    } else {
-      print("in loginhandle");
-      // send query with name and password to the database if the username
-      //doesnt exist print user doesnt exist if user exist but password is
-      //incorrect print passwrod is incorrect
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
-      try {
-        // Check credentials
-        final response =
-            await Supabase.instance.client
-                .from('User')
-                .select("*")
-                .eq('email', email)
-                .maybeSingle();
+    try {
+      // Check credentials
+      final response =
+          await Supabase.instance.client
+              .from('User')
+              .select("*")
+              .eq('email', email)
+              .maybeSingle();
 
-        if (response == null) {
-          print("No user found with that email.");
-          // Optionally show error to user
-          return;
-        }
-
-        final storedPassword = response['password'];
-
-        if (storedPassword == password) {
-          print("Login successful!");
-          // Set the logged-in user
-          loggedInUserEmail = email;
-
-          // Navigate to next screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        } else {
-          print("Incorrect password.");
-        }
-      } catch (e) {
-        print("Login error: $e");
+      if (response == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No user found with that email'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
       }
+
+      final storedPassword = response['password'];
+
+      if (storedPassword == password) {
+        print("Login successful!");
+        // Set the logged-in user
+        loggedInUserEmail = email;
+
+        // Navigate to next screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Incorrect password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print("Login error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -109,6 +124,59 @@ class LoginLogic {
         print('Error registering user: $e');
         // Show error message
       }
+    }
+  }
+
+  Future<void> handleBrandAdminLogin(
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response =
+          await Supabase.instance.client
+              .from('brand_admins')
+              .select()
+              .eq('email', email)
+              .single();
+
+      if (response['password'] == password) {
+        // Store the logged-in brand admin's email
+        loggedInUserEmail = email;
+
+        // TODO: Navigate to brand admin dashboard
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Brand admin login successful!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error during brand admin login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }
