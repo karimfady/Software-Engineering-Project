@@ -31,7 +31,10 @@ class AboutUsPage extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               'Our Story',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -41,7 +44,10 @@ class AboutUsPage extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               'Our Values',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 16),
             _buildValueCard(
@@ -70,7 +76,10 @@ class AboutUsPage extends StatelessWidget {
             const SizedBox(height: 32),
             const Text(
               'Our Team',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -104,7 +113,10 @@ class AboutUsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(description, style: const TextStyle(fontSize: 14)),
+                  Text(
+                    description,
+                    style: const TextStyle(fontSize: 14),
+                  ),
                 ],
               ),
             ),
@@ -113,4 +125,4 @@ class AboutUsPage extends StatelessWidget {
       ),
     );
   }
-}
+} 
