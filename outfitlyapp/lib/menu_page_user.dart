@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'login_logic.dart';
 import 'login_page.dart';
+import 'contact_us_page.dart';
+import 'about_us_page.dart';
+import 'privacy_policy_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -61,7 +64,12 @@ class _MenuPageState extends State<MenuPage> {
                   title: const Text('Contact Us'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    // Navigate to contact page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ContactUsPage(),
+                      ),
+                    );
                   },
                 ),
                 const Divider(),
@@ -70,7 +78,12 @@ class _MenuPageState extends State<MenuPage> {
                   title: const Text('About Us'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    // Navigate to about page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AboutUsPage(),
+                      ),
+                    );
                   },
                 ),
                 const Divider(),
@@ -79,7 +92,12 @@ class _MenuPageState extends State<MenuPage> {
                   title: const Text('Privacy Policy'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    // Navigate to privacy policy page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PrivacyPolicyPage(),
+                      ),
+                    );
                   },
                 ),
               ],
