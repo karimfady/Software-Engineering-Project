@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_logic.dart';
 import 'register_page.dart';
+import 'brand_admin_register_page.dart';
 import 'home_page_user.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +16,45 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final LoginLogic loginLogic = LoginLogic();
   String _accountType = 'customer'; // Default to customer account
+
+  void _showRegistrationOptions() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Choose Account Type'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('Customer'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.business),
+                  title: const Text('Brand Admin'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BrandAdminRegisterPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,12 +167,7 @@ class _LoginPageState extends State<LoginPage> {
 
             // Register Button
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
-                );
-              },
+              onPressed: _showRegistrationOptions,
               child: Text('Don\'t have an account? Register'),
             ),
           ],
