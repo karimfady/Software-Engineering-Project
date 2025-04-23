@@ -9,6 +9,7 @@ import 'view_all_brands.dart';
 import 'view_all_products.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'search_page.dart';
+import 'outfit_generator.dart';
 
 // Brand Model
 class Brand {
@@ -144,6 +145,7 @@ class _HomePageState extends State<HomePage> {
         children: const [
           HomeContent(),
           ShopPage(),
+          OutfitGeneratorPage(),
           CartPage(),
           WishlistPage(),
           MenuPage(),
@@ -157,6 +159,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.shopping_bag),
             label: 'Shop',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.style), label: 'Outfits'),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
