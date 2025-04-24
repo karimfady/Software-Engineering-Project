@@ -13,6 +13,7 @@ class Product {
   final String typeOfClothing;
   final List<String> sizes;
   final String id;
+  final int stock; // Add this line
 
   Product({
     required this.productName,
@@ -24,6 +25,7 @@ class Product {
     required this.typeOfClothing,
     required this.sizes,
     required this.id,
+    required this.stock, // Add this line
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -66,6 +68,7 @@ class Product {
       typeOfClothing: json['type_of_clothing'] ?? '',
       sizes: sizesList,
       id: productId,
+      stock: (json['stock'] as num?)?.toInt() ?? 0, // Add this line
     );
   }
 }
@@ -98,10 +101,21 @@ class _SearchPageState extends State<SearchPage> {
     try {
       final List<dynamic> response = await supabase
           .from('Product')
-          .select()
+          .select(
+            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Stock',
+          )
           .filter('Tags', 'cs', '{$query}');
 
-      final results = response.map((e) => Product.fromJson(e)).toList();
+      final results =
+          response
+              .map(
+                (product) => Product.fromJson({
+                  ...product,
+                  'stock':
+                      product['Stock'], // Map the correct column name to 'stock'
+                }),
+              )
+              .toList();
 
       setState(() {
         searchResults = results;
@@ -223,6 +237,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     product.typeOfClothing,
                                                 sizes: product.sizes,
                                                 id: product.id,
+                                                stock:
+                                                    product
+                                                        .stock, // Add this line
                                               ),
                                         ),
                                       );
@@ -309,6 +326,36 @@ class _SearchPageState extends State<SearchPage> {
                                                   style: const TextStyle(
                                                     color: Colors.green,
                                                     fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        product.stock > 0
+                                                            ? Colors.green[100]
+                                                            : Colors.red[100],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                  ),
+                                                  child: Text(
+                                                    product.stock > 0
+                                                        ? 'In Stock'
+                                                        : 'Out of Stock',
+                                                    style: TextStyle(
+                                                      color:
+                                                          product.stock > 0
+                                                              ? Colors
+                                                                  .green[900]
+                                                              : Colors.red[900],
+                                                      fontSize: 12,
+                                                    ),
                                                   ),
                                                 ),
                                               ],

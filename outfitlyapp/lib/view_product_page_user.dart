@@ -15,6 +15,7 @@ class ProductPage extends StatefulWidget {
   final String typeOfClothing;
   final List<String> sizes;
   final String id;
+  final int stock; // Add this line
 
   const ProductPage({
     Key? key,
@@ -27,6 +28,7 @@ class ProductPage extends StatefulWidget {
     required this.typeOfClothing,
     required this.sizes,
     required this.id,
+    required this.stock, // Add this line
   }) : super(key: key);
 
   @override
@@ -293,32 +295,33 @@ class _ProductPageState extends State<ProductPage> {
                   _buildInfoRow('Color', widget.color),
                   _buildInfoRow('Category', widget.category),
                   _buildInfoRow('Type', widget.typeOfClothing),
-                  const SizedBox(height: 24),
-
-                  // Size Selection
-                  const Text(
-                    'Select Size',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  if (widget.sizes.isEmpty)
-                    const Text('No sizes available')
-                  else
-                    Wrap(
-                      spacing: 8,
-                      children:
-                          widget.sizes.map((size) {
-                            return ChoiceChip(
-                              label: Text(size),
-                              selected: selectedSize == size,
-                              onSelected: (selected) {
-                                setState(() {
-                                  selectedSize = selected ? size : null;
-                                });
-                              },
-                            );
-                          }).toList(),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
                     ),
+                    decoration: BoxDecoration(
+                      color:
+                          widget.stock > 0
+                              ? Colors.green[100]
+                              : Colors.red[100],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      widget.stock > 0
+                          ? 'In Stock (${widget.stock} available)'
+                          : 'Out of Stock',
+                      style: TextStyle(
+                        color:
+                            widget.stock > 0
+                                ? Colors.green[900]
+                                : Colors.red[900],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   const SizedBox(height: 24),
 
                   // Quantity Selection

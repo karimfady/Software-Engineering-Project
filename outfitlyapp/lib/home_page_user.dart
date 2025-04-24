@@ -34,6 +34,7 @@ class Product {
   final String typeOfClothing;
   final List<String> sizes;
   final String id;
+  final int stock; // Add this line
 
   Product({
     required this.productName,
@@ -45,6 +46,7 @@ class Product {
     required this.typeOfClothing,
     required this.sizes,
     required this.id,
+    required this.stock, // Add this line
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -100,6 +102,7 @@ class Product {
       typeOfClothing: json['type_of_clothing'] ?? '',
       sizes: sizesList,
       id: productId,
+      stock: (json['stock'] as num?)?.toInt() ?? 0, // Add this line
     );
   }
 }
@@ -247,7 +250,7 @@ class _HomeContentState extends State<HomeContent> {
       final List<dynamic> response = await supabase
           .from('Product')
           .select(
-            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size',
+            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Stock',
           );
       print('Raw response from Supabase: $response');
 
@@ -256,7 +259,11 @@ class _HomeContentState extends State<HomeContent> {
             response.map((product) {
               print('Processing product: $product');
               print('Product ID: ${product['id']}');
-              return Product.fromJson(product);
+              return Product.fromJson({
+                ...product,
+                'stock':
+                    product['Stock'], // Map the correct column name to 'stock'
+              });
             }).toList();
         print('Processed products: ${products.length}');
         // Print each product's details for debugging
@@ -266,6 +273,7 @@ class _HomeContentState extends State<HomeContent> {
           print('Price: ${product.price}');
           print('Picture URL: ${product.picture}');
           print('Sizes: ${product.sizes}');
+          print('Stock: ${product.stock}');
           print('---');
         });
         isLoadingProducts = false;
@@ -507,6 +515,7 @@ class _HomeContentState extends State<HomeContent> {
                                   typeOfClothing: product.typeOfClothing,
                                   sizes: product.sizes,
                                   id: product.id,
+                                  stock: product.stock, // Add this line
                                 ),
                           ),
                         );
@@ -579,11 +588,38 @@ class _HomeContentState extends State<HomeContent> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                  const SizedBox(height: 4),
                                   Text(
                                     '\$${product.price.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       color: Colors.green,
                                       fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          product.stock > 0
+                                              ? Colors.green[100]
+                                              : Colors.red[100],
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      product.stock > 0
+                                          ? 'In Stock'
+                                          : 'Out of Stock',
+                                      style: TextStyle(
+                                        color:
+                                            product.stock > 0
+                                                ? Colors.green[900]
+                                                : Colors.red[900],
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
                                 ],

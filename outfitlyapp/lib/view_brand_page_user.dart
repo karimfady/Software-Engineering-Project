@@ -30,13 +30,23 @@ class _BrandPageState extends State<BrandPage> {
       print('Fetching products for brand: ${widget.brandName}');
       final List<dynamic> response = await supabase
           .from('Product')
-          .select()
+          .select(
+            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Stock',
+          )
           .eq('brand_name', widget.brandName);
       print('Response from Supabase: $response');
 
       setState(() {
         brandProducts =
-            response.map((product) => Product.fromJson(product)).toList();
+            response
+                .map(
+                  (product) => Product.fromJson({
+                    ...product,
+                    'stock':
+                        product['Stock'], // Map the correct column name to 'stock'
+                  }),
+                )
+                .toList();
         print('Processed products: ${brandProducts.length}');
         // Print each product's details for debugging
         brandProducts.forEach((product) {
@@ -44,6 +54,7 @@ class _BrandPageState extends State<BrandPage> {
           print('Price: ${product.price}');
           print('Picture URL: ${product.picture}');
           print('Sizes: ${product.sizes}');
+          print('Stock: ${product.stock}');
           print('---');
         });
         isLoading = false;
@@ -152,6 +163,7 @@ class _BrandPageState extends State<BrandPage> {
                                               product.typeOfClothing,
                                           sizes: product.sizes,
                                           id: product.id,
+                                          stock: product.stock, // Add this line
                                         ),
                                   ),
                                 );
@@ -224,6 +236,18 @@ class _BrandPageState extends State<BrandPage> {
                                             '\$${product.price.toStringAsFixed(2)}',
                                             style: const TextStyle(
                                               color: Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            product.stock > 0
+                                                ? 'In Stock'
+                                                : 'Out of Stock',
+                                            style: TextStyle(
+                                              color:
+                                                  product.stock > 0
+                                                      ? Colors.green
+                                                      : Colors.red,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),

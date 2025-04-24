@@ -28,11 +28,23 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
     final supabase = Supabase.instance.client;
     try {
       print('Fetching all products...');
-      final List<dynamic> response = await supabase.from('Product').select();
+      final List<dynamic> response = await supabase
+          .from('Product')
+          .select(
+            'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Stock',
+          );
 
       setState(() {
         products =
-            response.map((product) => Product.fromJson(product)).toList();
+            response
+                .map(
+                  (product) => Product.fromJson({
+                    ...product,
+                    'stock':
+                        product['Stock'], // Map the correct column name to 'stock'
+                  }),
+                )
+                .toList();
         filteredProducts = products;
         print('Fetched ${products.length} products');
         isLoading = false;
@@ -134,6 +146,7 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
                                         typeOfClothing: product.typeOfClothing,
                                         sizes: product.sizes,
                                         id: product.id,
+                                        stock: product.stock, // Add this line
                                       ),
                                 ),
                               );
@@ -206,11 +219,22 @@ class _ViewAllProductsState extends State<ViewAllProducts> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        const SizedBox(height: 4),
                                         Text(
                                           '\$${product.price.toStringAsFixed(2)}',
                                           style: const TextStyle(
                                             color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          product.stock > 0
+                                              ? 'In Stock'
+                                              : 'Out of Stock',
+                                          style: TextStyle(
+                                            color:
+                                                product.stock > 0
+                                                    ? Colors.green
+                                                    : Colors.red,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
