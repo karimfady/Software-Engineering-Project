@@ -63,7 +63,8 @@ class _WishlistPageState extends State<WishlistPage> {
               color,
               category,
               type_of_clothing,
-              size
+              size,
+              Stock
             )
           ''')
           .eq('customer_username', username);
@@ -212,6 +213,32 @@ class _WishlistPageState extends State<WishlistPage> {
                                 style: const TextStyle(
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      product['Stock'] > 0
+                                          ? Colors.green[100]
+                                          : Colors.red[100],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  product['Stock'] > 0
+                                      ? 'In Stock'
+                                      : 'Out of Stock',
+                                  style: TextStyle(
+                                    color:
+                                        product['Stock'] > 0
+                                            ? Colors.green[900]
+                                            : Colors.red[900],
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 8),
