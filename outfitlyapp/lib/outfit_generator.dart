@@ -22,6 +22,10 @@ class OutfitGeneratorPage extends StatefulWidget {
 
 class _OutfitGeneratorPageState extends State<OutfitGeneratorPage> {
   final TextEditingController _controller = TextEditingController();
+  Product? shirtProduct;
+  Product? pantsProduct;
+  Product? shoesProduct;
+  double boxSize = 0; // Add this line to declare boxSize as a class property
 
   @override
   void dispose() {
@@ -29,12 +33,50 @@ class _OutfitGeneratorPageState extends State<OutfitGeneratorPage> {
     super.dispose();
   }
 
+  Widget buildProductSlot(Product? product, String label) {
+    return Container(
+      width: boxSize,
+      height: boxSize,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey),
+      ),
+      child:
+          product != null
+              ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Image.network(product.picture, fit: BoxFit.contain),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      product.productName,
+                      style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              )
+              : Center(
+                child: Text(
+                  label,
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final reservedHeight = 186;
     final availableHeight = screenHeight - reservedHeight;
-    final boxSize = (availableHeight - 40) / 3;
+    boxSize = (availableHeight - 40) / 3;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Outfit Generator'), centerTitle: true),
@@ -43,28 +85,11 @@ class _OutfitGeneratorPageState extends State<OutfitGeneratorPage> {
           const SizedBox(height: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(3, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Center(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Product Slot',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
+            children: [
+              buildProductSlot(shirtProduct, 'Shirt'),
+              buildProductSlot(pantsProduct, 'Pants'),
+              buildProductSlot(shoesProduct, 'Shoes'),
+            ],
           ),
           const Spacer(),
           Padding(
@@ -158,18 +183,17 @@ User input: "$lowerinput"
             if (product != null) {
               print('Product matched: ${product.productName}');
 
-              if (product.typeOfClothing.toLowerCase() == 'shirt') {
-                //put the product in slot number 1
-                // mostafa work here
-              } else if (product.typeOfClothing.toLowerCase() == 'pants') {
-                //put the product in slot number 2
-                // mostafa work here
-              } else if (product.typeOfClothing.toLowerCase() == 'shoes') {
-                //put the product in slot number 3
-                // mostafa work here
-              } else {
-                print("this is a mechalenious product");
-              }
+              setState(() {
+                if (product.typeOfClothing.toLowerCase() == 'shirt') {
+                  shirtProduct = product;
+                } else if (product.typeOfClothing.toLowerCase() == 'pants') {
+                  pantsProduct = product;
+                } else if (product.typeOfClothing.toLowerCase() == 'shoes') {
+                  shoesProduct = product;
+                } else {
+                  print("this is a miscellaneous product");
+                }
+              });
             } else {
               print('No product matched.');
             }
