@@ -15,7 +15,26 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final LoginLogic loginLogic = LoginLogic();
-  String _accountType = 'customer'; // Default to customer account
+  String _accountType = 'customer';
+
+  // Define theme colors
+  final customerTheme = {
+    'primary': Colors.blue,
+    'background': Colors.grey[100],
+    'buttonColor': Colors.blue,
+    'iconColor': Colors.blue,
+  };
+
+  final brandTheme = {
+    'primary': Colors.deepPurple,
+    'background': Colors.grey[50],
+    'buttonColor': Colors.deepPurple,
+    'iconColor': Colors.deepPurple,
+  };
+
+  // Get current theme based on account type
+  Map<String, dynamic> get currentTheme =>
+      _accountType == 'customer' ? customerTheme : brandTheme;
 
   void _showRegistrationOptions() {
     showDialog(
@@ -59,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: currentTheme['background'],
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -91,53 +110,26 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+                prefixIcon: Icon(Icons.email, color: currentTheme['iconColor']),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: currentTheme['primary']),
+                ),
               ),
             ),
             SizedBox(height: 20),
-
-            // Password Field
             TextField(
               controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-              ),
-            ),
-            SizedBox(height: 20),
-
-            // Account Type Selection
-            Card(
-              child: Column(
-                children: [
-                  RadioListTile<String>(
-                    title: const Text('Customer Account'),
-                    value: 'customer',
-                    groupValue: _accountType,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _accountType = value!;
-                      });
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: const Text('Brand Admin Account'),
-                    value: 'brand_admin',
-                    groupValue: _accountType,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _accountType = value!;
-                      });
-                    },
-                  ),
-                ],
+                prefixIcon: Icon(Icons.lock, color: currentTheme['iconColor']),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: currentTheme['primary']),
+                ),
               ),
             ),
             SizedBox(height: 30),
-
-            // Login Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -156,22 +148,42 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   }
                 },
-                child: Text('Login'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   textStyle: TextStyle(fontSize: 16),
+                  backgroundColor: currentTheme['buttonColor'],
+                  foregroundColor:
+                      Colors.white, // Added this line to make text white
                 ),
+                child: Text('Login'),
               ),
             ),
             SizedBox(height: 12),
-
-            // Register Button
             TextButton(
               onPressed: _showRegistrationOptions,
+              style: TextButton.styleFrom(
+                foregroundColor: currentTheme['primary'],
+              ),
               child: Text('Don\'t have an account? Register'),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _accountType == 'customer' ? 0 : 1,
+        onTap: (index) {
+          setState(() {
+            _accountType = index == 0 ? 'customer' : 'brand_admin';
+          });
+        },
+        selectedItemColor: currentTheme['primary'],
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Customer'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Brand Owner',
+          ),
+        ],
       ),
     );
   }
