@@ -110,14 +110,17 @@ class _OutfitGeneratorPageState extends State<OutfitGeneratorPage> {
       'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=$apiKey',
     );
 
+    String lowerinput = input.toLowerCase();
+
     final prompt = '''
 You are a PostgreSQL query assistant. Given a user's request, generate a valid SQL WHERE clause using this schema:
 
 Product(id UUID, size TEXT, color VARCHAR, price INT8, brand_name TEXT, Tags TEXT[], picture TEXT, product_name TEXT, category TEXT, type_of_clothing TEXT, stock INT)
 
-Only return the WHERE clause. Do not explain it. Donot include the WHERE keyword in your response
+Only return the WHERE clause. Do not explain it. Donot include the WHERE keyword in your response. if the user's
+request is requires multiple where clauses for mutiple rows provide the Where statments Delimited by ;.
 
-User input: "$input"
+User input: "$lowerinput"
 ''';
 
     final headers = {'Content-Type': 'application/json'};
@@ -146,13 +149,30 @@ User input: "$input"
             candidates[0]['content']['parts'] != null &&
             candidates[0]['content']['parts'].isNotEmpty) {
           final whereClause = candidates[0]['content']['parts'][0]['text'];
-          print('Gemini WHERE clause:\n$whereClause');
+          List<String> delimitedWheres = whereClause.split(';');
+          print('Gemini WHERE clause:\n$delimitedWheres');
 
-          final product = await fetchProductByDeepseekQuery(whereClause.trim());
-          if (product != null) {
-            print('Product matched: ${product.productName}');
-          } else {
-            print('No product matched.');
+          for (var clause in delimitedWheres) {
+            final trimmedClause = clause.trim();
+            final product = await fetchProductByDeepseekQuery(trimmedClause);
+            if (product != null) {
+              print('Product matched: ${product.productName}');
+
+              if (product.typeOfClothing.toLowerCase() == 'shirt') {
+                //put the product in slot number 1
+                // mostafa work here
+              } else if (product.typeOfClothing.toLowerCase() == 'pants') {
+                //put the product in slot number 2
+                // mostafa work here
+              } else if (product.typeOfClothing.toLowerCase() == 'shoes') {
+                //put the product in slot number 3
+                // mostafa work here
+              } else {
+                print("this is a mechalenious product");
+              }
+            } else {
+              print('No product matched.');
+            }
           }
         } else {
           print('Gemini response structure unexpected or empty.');
