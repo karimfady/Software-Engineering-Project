@@ -36,45 +36,6 @@ class _LoginPageState extends State<LoginPage> {
   Map<String, dynamic> get currentTheme =>
       _accountType == 'customer' ? customerTheme : brandTheme;
 
-  void _showRegistrationOptions() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Choose Account Type'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Customer'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.business),
-                  title: const Text('Brand Admin'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BrandAdminRegisterPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,20 +113,41 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.symmetric(vertical: 14),
                   textStyle: TextStyle(fontSize: 16),
                   backgroundColor: currentTheme['buttonColor'],
-                  foregroundColor:
-                      Colors.white, // Added this line to make text white
+                  foregroundColor: Colors.white,
                 ),
                 child: Text('Login'),
               ),
             ),
             SizedBox(height: 12),
-            TextButton(
-              onPressed: _showRegistrationOptions,
-              style: TextButton.styleFrom(
-                foregroundColor: currentTheme['primary'],
-              ),
-              child: Text('Don\'t have an account? Register'),
-            ),
+            _accountType == 'customer'
+                ? TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: currentTheme['primary'],
+                  ),
+                  child: Text('Don\'t have an account? Register as Customer'),
+                )
+                : TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BrandAdminRegisterPage(),
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: currentTheme['primary'],
+                  ),
+                  child: Text(
+                    'Don\'t have an account? Register as Brand Owner',
+                  ),
+                ),
           ],
         ),
       ),
