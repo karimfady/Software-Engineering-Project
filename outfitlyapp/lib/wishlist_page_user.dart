@@ -159,107 +159,133 @@ class _WishlistPageState extends State<WishlistPage> {
 
                   return Card(
                     clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Image.network(
-                                product['picture'],
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                    ),
-                                    child: const Center(
-                                      child: Icon(Icons.image, size: 40),
-                                    ),
-                                  );
-                                },
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed:
-                                      () => _removeFromWishlist(item['id']),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => ProductPage(
+                                  productName: product['product_name'],
+                                  picture: product['picture'],
+                                  price: (item['price'] as int) / 100,
+                                  brandName: product['brand_name'],
+                                  color: product['color'],
+                                  category: product['category'],
+                                  typeOfClothing: product['type_of_clothing'],
+                                  sizes:
+                                      (product['size'] as List<dynamic>)
+                                          .cast<String>(),
+                                  id: product['id'],
+                                  stock: product['Stock'],
                                 ),
-                              ),
-                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product['product_name'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                '\$${priceInDollars.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      product['Stock'] > 0
-                                          ? Colors.green[100]
-                                          : Colors.red[100],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  product['Stock'] > 0
-                                      ? 'In Stock'
-                                      : 'Out of Stock',
-                                  style: TextStyle(
-                                    color:
-                                        product['Stock'] > 0
-                                            ? Colors.green[900]
-                                            : Colors.red[900],
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // Add to cart functionality will be implemented later
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Added to cart!'),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Image.network(
+                                  product['picture'],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                      ),
+                                      child: const Center(
+                                        child: Icon(Icons.image, size: 40),
                                       ),
                                     );
                                   },
-                                  child: const Text('Add to Cart'),
                                 ),
-                              ),
-                            ],
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed:
+                                        () => _removeFromWishlist(item['id']),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product['product_name'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '\$${priceInDollars.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        product['Stock'] > 0
+                                            ? Colors.green[100]
+                                            : Colors.red[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    product['Stock'] > 0
+                                        ? 'In Stock'
+                                        : 'Out of Stock',
+                                    style: TextStyle(
+                                      color:
+                                          product['Stock'] > 0
+                                              ? Colors.green[900]
+                                              : Colors.red[900],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Add to cart functionality will be implemented later
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Added to cart!'),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Add to Cart'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
