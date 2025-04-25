@@ -367,6 +367,41 @@ class _ProductPageState extends State<ProductPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  // Size Selection
+                  const Text(
+                    'Select Size',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children:
+                        widget.sizes.map((size) {
+                          final isSelected = selectedSize == size;
+                          return ChoiceChip(
+                            label: Text(size),
+                            selected: isSelected,
+                            onSelected: (selected) {
+                              setState(() {
+                                selectedSize = selected ? size : null;
+                              });
+                            },
+                            selectedColor: Colors.blue[100],
+                            backgroundColor: Colors.grey[200],
+                            labelStyle: TextStyle(
+                              color:
+                                  isSelected ? Colors.blue[900] : Colors.black,
+                              fontWeight:
+                                  isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
