@@ -4,6 +4,8 @@ import 'login_logic.dart';
 import 'cart_state.dart';
 import 'view_product_page_user.dart';
 import 'checkout_page.dart';
+import 'payment_page.dart';
+import 'payment_method_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -291,31 +293,108 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (cartItems.isEmpty) return;
+                            onPressed: () async {
+                              if (cartItems.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Your cart is empty'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
 
-                              // Get the order ID from the first item
-                              final orderId = cartItems[0]['order_id'];
+                              try {
+                                final userEmail =
+                                    LoginLogic.getLoggedInUserEmail();
+                                if (userEmail == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please login to continue'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => CheckoutPage(
-                                        totalPrice: totalPrice,
-                                        orderId: orderId,
-                                      ),
-                                ),
-                              ).then((_) {
-                                _loadCartItems(); // Reload cart after checkout
-                              });
+                                // Get username from email
+                                final userResponse =
+                                    await Supabase.instance.client
+                                        .from('User')
+                                        .select('user_name')
+                                        .eq('email', userEmail)
+                                        .single();
+
+                                final username = userResponse['user_name'];
+
+                                // Create order
+                                final orderResponse =
+                                    await Supabase.instance.client
+                                        .from('Order')
+                                        .insert({
+                                          'customer_username': username,
+                                          'status': 'Pending',
+                                          'total_price': totalPrice,
+                                        })
+                                        .select()
+                                        .single();
+
+                                final orderId =
+                                    orderResponse['order_id'] as String;
+
+                                // Add order items
+                                for (final item in cartItems) {
+                                  await Supabase.instance.client
+                                      .from('order_item')
+                                      .insert({
+                                        'order_id': orderId,
+                                        'product_id': item['product']['id'],
+                                        'quantity': item['quantity'],
+                                        'price_per_item':
+                                            item['price_per_item'],
+                                        'size': item['size'],
+                                      });
+                                }
+
+                                // Clear cart
+                                await Supabase.instance.client
+                                    .from('order_item')
+                                    .delete()
+                                    .eq('order_id', cartItems[0]['order_id']);
+
+                                if (context.mounted) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => PaymentMethodPage(
+                                            totalPrice: totalPrice,
+                                            orderId: orderId,
+                                          ),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error: ${e.toString()}'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
                             },
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: Colors.deepPurple,
+                              minimumSize: const Size(double.infinity, 50),
                             ),
                             child: const Text(
                               'Checkout',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

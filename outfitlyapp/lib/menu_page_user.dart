@@ -5,6 +5,7 @@ import 'login_page.dart';
 import 'contact_us_page.dart';
 import 'about_us_page.dart';
 import 'privacy_policy_page.dart';
+import 'payment_cards_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -43,6 +44,19 @@ class _MenuPageState extends State<MenuPage> {
                   title: const Text('My Orders'),
                   onTap: () {
                     Navigator.pushNamed(context, '/orders');
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.credit_card),
+                  title: const Text('Payment Details'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PaymentCardsPage(),
+                      ),
+                    );
                   },
                 ),
               ],
