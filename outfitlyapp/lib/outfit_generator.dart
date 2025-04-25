@@ -34,40 +34,68 @@ class _OutfitGeneratorPageState extends State<OutfitGeneratorPage> {
   }
 
   Widget buildProductSlot(Product? product, String label) {
-    return Container(
-      width: boxSize,
-      height: boxSize,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey),
-      ),
-      child:
+    return GestureDetector(
+      onTap:
           product != null
-              ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Image.network(product.picture, fit: BoxFit.contain),
+              ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ProductPage(
+                          productName: product.productName,
+                          picture: product.picture,
+                          price: product.price,
+                          brandName: product.brandName,
+                          color: product.color,
+                          category: product.category,
+                          typeOfClothing: product.typeOfClothing,
+                          sizes: product.sizes,
+                          id: product.id,
+                          stock: product.stock,
+                        ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      product.productName,
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                );
+              }
+              : null,
+      child: Container(
+        width: boxSize,
+        height: boxSize,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey),
+        ),
+        child:
+            product != null
+                ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Image.network(
+                        product.picture,
+                        fit: BoxFit.contain,
+                      ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        product.productName,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                )
+                : Center(
+                  child: Text(
+                    label,
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
-                ],
-              )
-              : Center(
-                child: Text(
-                  label,
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
-              ),
+      ),
     );
   }
 
