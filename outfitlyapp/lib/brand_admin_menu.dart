@@ -5,65 +5,21 @@ import 'login_page.dart';
 import 'contact_us_page.dart';
 import 'about_us_page.dart';
 import 'privacy_policy_page.dart';
-import 'payment_cards_page.dart';
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+class BrandAdminMenu extends StatefulWidget {
+  const BrandAdminMenu({Key? key}) : super(key: key);
 
   @override
-  State<MenuPage> createState() => _MenuPageState();
+  State<BrandAdminMenu> createState() => _BrandAdminMenuState();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _BrandAdminMenuState extends State<BrandAdminMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Menu'), centerTitle: true),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // My Account Section
-          const Text(
-            'My Account',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('My Profile'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/profile');
-                  },
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.shopping_bag_outlined),
-                  title: const Text('My Orders'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/orders');
-                  },
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.credit_card),
-                  title: const Text('Payment Details'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentCardsPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
           // Support Section
           const Text(
             'Support',
@@ -125,10 +81,9 @@ class _MenuPageState extends State<MenuPage> {
             child: ElevatedButton(
               onPressed: () {
                 // Implement logout logic
-                // Naviagte to login page
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                   (route) => false, // This removes all previous routes
                 );
               },

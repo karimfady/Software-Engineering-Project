@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login_logic.dart';
 import 'register_page.dart';
 import 'home_page_user.dart';
+import 'brand_admin_dashboard.dart';
 
 class LoginLogic {
   static String? loggedInUserEmail; // Static variable to track logged-in user
@@ -143,34 +144,46 @@ class LoginLogic {
     }
 
     try {
+      // Check credentials
       final response =
           await Supabase.instance.client
               .from('brand_admin')
-              .select()
+              .select("*")
               .eq('email', email)
-              .single();
+              .maybeSingle();
 
-      if (response['password'] == password) {
-        // Store the logged-in brand admin's email
-        loggedInUserEmail = email;
-
-        // TODO: Navigate to brand admin dashboard
+      if (response == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Brand admin login successful!'),
-            backgroundColor: Colors.green,
+            content: Text('No brand admin found with that email'),
+            backgroundColor: Colors.red,
           ),
+        );
+        return;
+      }
+
+      final storedPassword = response['password'];
+
+      if (storedPassword == password) {
+        print("Brand admin login successful!");
+        // Set the logged-in user
+        loggedInUserEmail = email;
+
+        // Navigate to brand admin dashboard
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BrandAdminDashboard()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Invalid password'),
+            content: Text('Incorrect password'),
             backgroundColor: Colors.red,
           ),
         );
       }
     } catch (e) {
-      print('Error during brand admin login: $e');
+      print("Brand admin login error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: ${e.toString()}'),
