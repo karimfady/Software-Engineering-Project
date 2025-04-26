@@ -145,7 +145,7 @@ class LoginLogic {
     try {
       final response =
           await Supabase.instance.client
-              .from('brand_admins')
+              .from('brand_admin')
               .select()
               .eq('email', email)
               .single();

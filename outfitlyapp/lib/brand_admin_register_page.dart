@@ -86,22 +86,13 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
 
   Future<void> _registerBrandAdmin() async {
     try {
-      // Register user
-      final authResponse = await Supabase.instance.client.auth.signUp(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      );
-
-      if (authResponse.user == null) {
-        throw Exception('Failed to create user');
-      }
-
-      // Create brand admin profile
+      // Create brand admin profile with password
       await Supabase.instance.client.from('brand_admin').insert({
-        'id': authResponse.user!.id,
         'username': usernameController.text.trim(),
         'email': emailController.text.trim(),
         'brand_name': brandNameController.text.trim(),
+        'password':
+            passwordController.text, // Store password directly in the table
       });
 
       if (!mounted) return;
