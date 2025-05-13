@@ -33,20 +33,18 @@ class _BrandPageState extends State<BrandPage> {
           .select(
             'id, product_name, price, picture, brand_name, color, category, type_of_clothing, size, Stock',
           )
-          .eq('brand_name', widget.brandName);
+          .ilike('brand_name', widget.brandName);
       print('Response from Supabase: $response');
+      print('Searching for brand: ${widget.brandName}');
 
       setState(() {
         brandProducts =
-            response
-                .map(
-                  (product) => Product.fromJson({
-                    ...product,
-                    'stock':
-                        product['Stock'], // Map the correct column name to 'stock'
-                  }),
-                )
-                .toList();
+            response.map((product) {
+              print(
+                'Processing product: ${product['product_name']} with brand: ${product['brand_name']}',
+              );
+              return Product.fromJson({...product, 'stock': product['Stock']});
+            }).toList();
         print('Processed products: ${brandProducts.length}');
         // Print each product's details for debugging
         brandProducts.forEach((product) {

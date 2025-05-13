@@ -109,12 +109,13 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
           .from('order_item')
           .select('''
             *,
-            Order (
+            Order!inner (
               order_id,
               status
             )
           ''')
-          .neq('status', 'In Cart');
+          .neq('Order.status', 'In Cart')
+          .neq('Order.status', 'Pending'); // Also exclude pending orders
 
       print('Order items with order details: $response'); // Debug log
 
@@ -122,7 +123,10 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
       final productsResponse = await Supabase.instance.client
           .from('Product')
           .select('*')
-          .eq('brand_name', brandName!.toLowerCase());
+          .ilike(
+            'brand_name',
+            brandName!,
+          ); // Changed to case-insensitive comparison
 
       print('Products for brand $brandName: $productsResponse'); // Debug log
 
@@ -134,7 +138,8 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
       // Create a map of product IDs to their details for quick lookup
       final Map<String, Map<String, dynamic>> productMap = {};
       for (var product in productsResponse) {
-        productMap[product['id']] = product;
+        productMap[product['id'].toString()] =
+            product; // Convert ID to string for comparison
       }
 
       // Debug: Print product map
@@ -144,13 +149,9 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
       for (var item in response) {
         print('Processing order item: $item'); // Debug log
 
-        // Skip if the status is In Cart
-        if (item['status'] == 'In Cart') {
-          print('Skipping item with status: In Cart'); // Debug log
-          continue;
-        }
-
-        final productId = item['product_id'];
+        final productId =
+            item['product_id'].toString(); // Convert to string for comparison
+        print('Checking product ID: $productId'); // Debug log
 
         // Only process items that belong to this brand
         if (productMap.containsKey(productId)) {
@@ -170,6 +171,10 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
               (price * quantity) / 100; // Convert cents to dollars
           totalRev += (price * quantity) / 100;
           totalSold += quantity;
+
+          print(
+            'Updated sales for product $productId: ${productSales[productId]}',
+          ); // Debug log
         } else {
           print('Product $productId not found in brand products'); // Debug log
         }

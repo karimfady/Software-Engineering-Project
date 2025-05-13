@@ -386,7 +386,7 @@ class _CartPageState extends State<CartPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepPurple,
+                              backgroundColor: Color(0xff041511),
                               minimumSize: const Size(double.infinity, 50),
                             ),
                             child: const Text(
