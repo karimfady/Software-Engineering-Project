@@ -91,8 +91,7 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
         'username': usernameController.text.trim(),
         'email': emailController.text.trim(),
         'brand_name': brandNameController.text.trim(),
-        'password':
-            passwordController.text, // Store password directly in the table
+        'password': passwordController.text,
       });
 
       if (!mounted) return;
@@ -111,7 +110,23 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Brand Admin Registration')),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Brand Admin Register',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -119,13 +134,35 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Logo
+              Center(
+                child: Text(
+                  "Outfitly",
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.w700),
+                ),
+              ),
+              SizedBox(height: 20),
+              // Divider
+              Container(
+                width: 189.41,
+                height: 16.47,
+                child: Image.asset(
+                  "assets/images/Rectangle 9.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(height: 40),
+              // Registration form
               TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+                decoration: InputDecoration(
+                  labelText: 'E-mail',
+                  labelStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -134,13 +171,16 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 20),
               TextFormField(
                 controller: usernameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Username',
+                  labelStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -149,14 +189,17 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 20),
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
+                  labelStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -165,13 +208,16 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 20),
               TextFormField(
                 controller: brandNameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Brand Name',
+                  labelStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.business),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -180,7 +226,7 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -195,18 +241,28 @@ class _BrandAdminRegisterPageState extends State<BrandAdminRegisterPage> {
                     ),
                   );
                 },
-                child: const Text('Don\'t have a brand? Create one now.'),
+                style: TextButton.styleFrom(foregroundColor: Color(0xff041511)),
+                child: Text(
+                  'Don\'t have a brand? Create one now.',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isLoading ? null : _checkBrandAndRegister,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Color(0xff041511),
+                  foregroundColor: Colors.white,
+                ),
                 child:
                     _isLoading
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text('Register'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
               ),
             ],
           ),

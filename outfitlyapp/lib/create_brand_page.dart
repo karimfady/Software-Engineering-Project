@@ -155,7 +155,23 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Brand')),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Create Brand',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -163,12 +179,34 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Logo
+              Center(
+                child: Text(
+                  "Outfitly",
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.w700),
+                ),
+              ),
+              SizedBox(height: 20),
+              // Divider
+              Container(
+                width: 189.41,
+                height: 16.47,
+                child: Image.asset(
+                  "assets/images/Rectangle 9.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(height: 40),
+              // Brand creation form
               TextFormField(
                 controller: brandNameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Brand Name',
+                  labelStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.business),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -177,24 +215,35 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: Color(0xff041511)),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child:
                       (kIsWeb ? _webImage == null : _logoFile == null)
-                          ? const Center(
+                          ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.add_photo_alternate, size: 50),
+                                Icon(
+                                  Icons.add_photo_alternate,
+                                  size: 50,
+                                  color: Color(0xff041511),
+                                ),
                                 SizedBox(height: 8),
-                                Text('Tap to select logo'),
+                                Text(
+                                  'Tap to select logo',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff041511),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -203,16 +252,22 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                           : Image.file(_logoFile!, fit: BoxFit.cover),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isLoading ? null : _createBrand,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Color(0xff041511),
+                  foregroundColor: Colors.white,
+                ),
                 child:
                     _isLoading
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text('Create Brand'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
               ),
             ],
           ),

@@ -13,65 +13,83 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController streetController = TextEditingController();
   final TextEditingController postalCodeController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   final LoginLogic loginLogic = LoginLogic();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Register',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 40.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildTextField('First Name', Icons.person, firstNameController),
-            SizedBox(height: 20),
-            buildTextField(
-              'Last Name',
-              Icons.person_outline,
-              lastNameController,
+            // Logo
+            Center(
+              child: Text(
+                "Outfitly",
+                style: TextStyle(fontSize: 48, fontWeight: FontWeight.w700),
+              ),
             ),
             SizedBox(height: 20),
-            buildTextField(
-              'Username',
-              Icons.account_circle,
-              usernameController,
+            // Divider
+            Container(
+              width: 189.41,
+              height: 16.47,
+              child: Image.asset(
+                "assets/images/Rectangle 9.png",
+                fit: BoxFit.contain,
+              ),
             ),
+            SizedBox(height: 40),
+            // Registration form
+            buildTextField('Username', usernameController),
             SizedBox(height: 20),
             buildTextField(
-              'Email',
-              Icons.email,
+              'E-mail',
               emailController,
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20),
-            buildTextField(
-              'Password',
-              Icons.lock,
-              passwordController,
-              obscureText: true,
-            ),
+            buildTextField('Password', passwordController, obscureText: true),
+            SizedBox(height: 20),
+            buildTextField('Country', countryController),
             SizedBox(height: 20),
             buildTextField(
-              'Confirm Password',
-              Icons.lock_outline,
-              confirmPasswordController,
-              obscureText: true,
+              'Phone',
+              phoneController,
+              keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 20),
-            buildTextField('Country', Icons.public, countryController),
-            SizedBox(height: 20),
-            buildTextField('City', Icons.location_city, cityController),
-            SizedBox(height: 20),
-            buildTextField('Street', Icons.streetview, streetController),
+            buildTextField('Street', streetController),
             SizedBox(height: 20),
             buildTextField(
               'Postal Code',
-              Icons.local_post_office,
               postalCodeController,
               keyboardType: TextInputType.number,
             ),
+            SizedBox(height: 20),
+            buildTextField('City', cityController),
             SizedBox(height: 30),
+            // Register button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -93,11 +111,16 @@ class RegisterPage extends StatelessWidget {
                     print('Make sure the passwords are compatible');
                   }
                 },
-                child: Text('Register'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 14),
-                  textStyle: TextStyle(fontSize: 16),
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Color(0xff041511),
+                  foregroundColor: Colors.white,
                 ),
+                child: Text('Register'),
               ),
             ),
           ],
@@ -108,7 +131,6 @@ class RegisterPage extends StatelessWidget {
 
   Widget buildTextField(
     String label,
-    IconData icon,
     TextEditingController controller, {
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
@@ -119,8 +141,8 @@ class RegisterPage extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
         border: OutlineInputBorder(),
-        prefixIcon: Icon(icon),
       ),
     );
   }
