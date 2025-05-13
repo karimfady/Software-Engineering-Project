@@ -120,28 +120,30 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  brand.logo,
-                                  fit: BoxFit.contain,
-                                  width: 90,
-                                  height: 90,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.store,
-                                      size: 40,
-                                      color: Color(0xff041511),
-                                    );
-                                  },
-                                  loadingBuilder: (
-                                    context,
-                                    child,
-                                    loadingProgress,
-                                  ) {
-                                    if (loadingProgress == null) return child;
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  },
+                                child: Center(
+                                  child: Image.network(
+                                    brand.logo,
+                                    fit: BoxFit.contain,
+                                    width: 80,
+                                    height: 80,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(
+                                        Icons.store,
+                                        size: 40,
+                                        color: Color(0xff041511),
+                                      );
+                                    },
+                                    loadingBuilder: (
+                                      context,
+                                      child,
+                                      loadingProgress,
+                                    ) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

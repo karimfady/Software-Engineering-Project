@@ -374,7 +374,7 @@ class _HomeContentState extends State<HomeContent> {
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  height: 120,
+                  height: 140,
                   child:
                       isLoading
                           ? const Center(child: CircularProgressIndicator())
@@ -401,33 +401,48 @@ class _HomeContentState extends State<HomeContent> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        width: 80,
-                                        height: 80,
+                                        width: 100,
+                                        height: 100,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[200],
                                           borderRadius: BorderRadius.circular(
-                                            40,
+                                            8,
                                           ),
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(
-                                            40,
+                                            8,
                                           ),
-                                          child: Image.network(
-                                            brand.logo,
-                                            fit: BoxFit.contain,
-                                            width: 70,
-                                            height: 70,
-                                            errorBuilder: (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) {
-                                              return const Icon(
-                                                Icons.store,
-                                                size: 40,
-                                              );
-                                            },
+                                          child: Center(
+                                            child: Image.network(
+                                              brand.logo,
+                                              fit: BoxFit.contain,
+                                              width: 80,
+                                              height: 80,
+                                              errorBuilder: (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) {
+                                                return const Icon(
+                                                  Icons.store,
+                                                  size: 40,
+                                                  color: Color(0xff041511),
+                                                );
+                                              },
+                                              loadingBuilder: (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
                                       ),
