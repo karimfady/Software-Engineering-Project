@@ -17,64 +17,149 @@ class _LoginPageState extends State<LoginPage> {
   final LoginLogic loginLogic = LoginLogic();
   String _accountType = 'customer';
 
-  // Define theme colors
-  final customerTheme = {
-    'primary': Colors.blue,
-    'background': Colors.grey[100],
-    'buttonColor': Colors.blue,
-    'iconColor': Colors.blue,
-  };
-
-  final brandTheme = {
-    'primary': Colors.deepPurple,
-    'background': Colors.grey[50],
-    'buttonColor': Colors.deepPurple,
-    'iconColor': Colors.deepPurple,
-  };
-
-  // Get current theme based on account type
-  Map<String, dynamic> get currentTheme =>
-      _accountType == 'customer' ? customerTheme : brandTheme;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: currentTheme['background'],
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 32),
-            Center(
-              child: Image.asset(
-                'assets/images/logo.jpeg',
-                height: 120,
-                width: 120,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Center(
-              child: Text(
-                'Welcome Back',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+            // Status bar time and icons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "12:30",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
+                Row(
+                  children: [
+                    // Signal strength icon
+                    Container(
+                      width: 18,
+                      height: 12,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                          4,
+                          (index) => Container(
+                            width: 3.17,
+                            height: 4.5 + (index * 2.5),
+                            color: Color(0xff041511),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    // WiFi icon
+                    Container(
+                      width: 16,
+                      height: 12,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 16,
+                            height: 5.19,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xff041511),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 2.5,
+                            child: Container(
+                              width: 10.42,
+                              height: 3.97,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0xff041511),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    // Battery icon
+                    Container(
+                      width: 24,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xff041511), width: 1),
+                        borderRadius: BorderRadius.circular(2.66),
+                      ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 17.75,
+                            height: 7.76,
+                            decoration: BoxDecoration(
+                              color: Color(0xff041511),
+                              borderRadius: BorderRadius.circular(1.33),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 40),
+            // Welcome text
+            Column(
+              children: [
+                Text(
+                  "Shop from your favourite store",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Exclusive everyday men's outfit. Buy two to get one for 50% off.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            SizedBox(height: 40),
+            // Logo
+            Center(
+              child: Text(
+                "Outfitly",
+                style: TextStyle(fontSize: 48, fontWeight: FontWeight.w700),
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 20),
+            // Divider
+            Container(
+              width: 189.41,
+              height: 16.47,
+              child: Image.asset(
+                "assets/images/Rectangle 9.png",
+                fit: BoxFit.contain,
+              ),
+            ),
+            SizedBox(height: 40),
+            // Login form
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email, color: currentTheme['iconColor']),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: currentTheme['primary']),
+                labelText: 'Username',
+                labelStyle: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w400,
                 ),
+                border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 20),
@@ -83,14 +168,15 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock, color: currentTheme['iconColor']),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: currentTheme['primary']),
+                labelStyle: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w400,
                 ),
+                border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 30),
+            // Login button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -111,14 +197,18 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 14),
-                  textStyle: TextStyle(fontSize: 16),
-                  backgroundColor: currentTheme['buttonColor'],
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Color(0xff041511),
                   foregroundColor: Colors.white,
                 ),
                 child: Text('Login'),
               ),
             ),
             SizedBox(height: 12),
+            // Register options
             _accountType == 'customer'
                 ? TextButton(
                   onPressed: () {
@@ -128,9 +218,12 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: currentTheme['primary'],
+                    foregroundColor: Color(0xff041511),
                   ),
-                  child: Text('Don\'t have an account? Register as Customer'),
+                  child: Text(
+                    'Register',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  ),
                 )
                 : TextButton(
                   onPressed: () {
@@ -142,10 +235,11 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: currentTheme['primary'],
+                    foregroundColor: Color(0xff041511),
                   ),
                   child: Text(
-                    'Don\'t have an account? Register as Brand Owner',
+                    'Register as Brand Owner',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                   ),
                 ),
           ],
@@ -158,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
             _accountType = index == 0 ? 'customer' : 'brand_admin';
           });
         },
-        selectedItemColor: currentTheme['primary'],
+        selectedItemColor: Color(0xff041511),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Customer'),
           BottomNavigationBarItem(
