@@ -130,11 +130,22 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Add New Product'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Add New Product',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff041511),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.save),
+            icon: Icon(Icons.save, color: Color(0xff041511)),
             onPressed: _isLoading ? null : _addProduct,
           ),
         ],
@@ -152,7 +163,9 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child:
@@ -160,13 +173,22 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                           ? kIsWeb
                               ? Image.memory(_webImage!, fit: BoxFit.cover)
                               : Image.file(_imageFile!, fit: BoxFit.cover)
-                          : const Center(
+                          : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.add_photo_alternate, size: 50),
-                                SizedBox(height: 8),
-                                Text('Tap to select image'),
+                                Icon(
+                                  Icons.add_photo_alternate,
+                                  size: 50,
+                                  color: Color(0xff041511).withOpacity(0.5),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tap to select image',
+                                  style: TextStyle(
+                                    color: Color(0xff041511).withOpacity(0.7),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -176,9 +198,25 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               // Product Details
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Product Name',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -191,10 +229,27 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               TextFormField(
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Price',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
                   prefixText: '\$',
+                  prefixStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -210,9 +265,25 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               TextFormField(
                 controller: _stockController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Stock',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -227,9 +298,25 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _colorController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Color',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -241,15 +328,34 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Category',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 items:
                     _categories.map((category) {
                       return DropdownMenuItem(
                         value: category,
-                        child: Text(category),
+                        child: Text(
+                          category,
+                          style: TextStyle(color: Color(0xff041511)),
+                        ),
                       );
                     }).toList(),
                 onChanged: (value) {
@@ -267,9 +373,25 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _typeController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Type of Clothing',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Color(0xff041511)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff041511).withOpacity(0.1),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xff041511)),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -279,9 +401,13 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Select Sizes',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff041511),
+                ),
               ),
               const SizedBox(height: 8),
               Wrap(
@@ -289,16 +415,37 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                 children:
                     sizes.map((size) {
                       return FilterChip(
-                        label: Text(size),
+                        label: Text(
+                          size,
+                          style: TextStyle(
+                            color:
+                                selectedSizes.contains(size)
+                                    ? Colors.white
+                                    : Color(0xff041511),
+                          ),
+                        ),
                         selected: selectedSizes.contains(size),
+                        selectedColor: Color(0xff041511),
+                        backgroundColor: Colors.white,
+                        checkmarkColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            color: Color(0xff041511).withOpacity(0.1),
+                          ),
+                        ),
                         onSelected: (selected) => _toggleSize(size),
                       );
                     }).toList(),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Tags',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff041511),
+                ),
               ),
               const SizedBox(height: 8),
               Row(
@@ -306,13 +453,34 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                   Expanded(
                     child: TextFormField(
                       controller: _tagsController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Enter a tag and press +',
-                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(
+                          color: Color(0xff041511).withOpacity(0.5),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xff041511).withOpacity(0.1),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xff041511).withOpacity(0.1),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Color(0xff041511)),
+                        ),
                       ),
                     ),
                   ),
-                  IconButton(icon: const Icon(Icons.add), onPressed: _addTag),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Color(0xff041511)),
+                    onPressed: _addTag,
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -321,7 +489,13 @@ class _BrandAdminAddProductState extends State<BrandAdminAddProduct> {
                 children:
                     tags.map((tag) {
                       return Chip(
-                        label: Text(tag),
+                        label: Text(tag, style: TextStyle(color: Colors.white)),
+                        backgroundColor: Color(0xff041511),
+                        deleteIcon: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                         onDeleted: () => _removeTag(tag),
                       );
                     }).toList(),

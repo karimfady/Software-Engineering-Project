@@ -194,6 +194,20 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Products',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff041511),
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           // Category Filter
@@ -206,8 +220,25 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text(category),
+                        label: Text(
+                          category,
+                          style: TextStyle(
+                            color:
+                                selectedCategory == category
+                                    ? Colors.white
+                                    : Color(0xff041511),
+                          ),
+                        ),
                         selected: selectedCategory == category,
+                        selectedColor: Color(0xff041511),
+                        backgroundColor: Colors.white,
+                        checkmarkColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            color: Color(0xff041511).withOpacity(0.1),
+                          ),
+                        ),
                         onSelected: (selected) {
                           if (selected) {
                             filterProducts(category);
@@ -226,7 +257,15 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                   isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : products.isEmpty
-                      ? const Center(child: Text('No products found'))
+                      ? Center(
+                        child: Text(
+                          'No products found',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff041511),
+                          ),
+                        ),
+                      )
                       : GridView.builder(
                         padding: const EdgeInsets.all(16),
                         gridDelegate:
@@ -253,9 +292,12 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                               );
                             },
                             child: Card(
-                              elevation: 4,
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
+                                side: BorderSide(
+                                  color: Color(0xff041511).withOpacity(0.1),
+                                ),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,13 +308,13 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                                         color: Colors.grey[200],
                                         borderRadius:
                                             const BorderRadius.vertical(
-                                              top: Radius.circular(12),
+                                              top: Radius.circular(8),
                                             ),
                                       ),
                                       child: ClipRRect(
                                         borderRadius:
                                             const BorderRadius.vertical(
-                                              top: Radius.circular(12),
+                                              top: Radius.circular(8),
                                             ),
                                         child: Image.network(
                                           product['picture'],
@@ -283,10 +325,13 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                                             error,
                                             stackTrace,
                                           ) {
-                                            return const Center(
+                                            return Center(
                                               child: Icon(
                                                 Icons.image,
                                                 size: 40,
+                                                color: Color(
+                                                  0xff041511,
+                                                ).withOpacity(0.5),
                                               ),
                                             );
                                           },
@@ -302,27 +347,33 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                                       children: [
                                         Text(
                                           product['product_name'],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff041511),
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
+                                        const SizedBox(height: 4),
                                         Text(
                                           '\$${product['price'].toStringAsFixed(2)}',
-                                          style: const TextStyle(
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.bold,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff041511),
                                           ),
                                         ),
+                                        const SizedBox(height: 4),
                                         Text(
                                           'Stock: ${product['Stock']}',
                                           style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
                                             color:
                                                 product['Stock'] > 0
-                                                    ? Colors.green
+                                                    ? Color(0xff041511)
                                                     : Colors.red,
-                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ],
@@ -353,7 +404,8 @@ class _BrandAdminProductsState extends State<BrandAdminProducts> {
                     ),
                   );
                 },
-                child: const Icon(Icons.add),
+                backgroundColor: Color(0xff041511),
+                child: const Icon(Icons.add, color: Colors.white),
               )
               : null,
     );

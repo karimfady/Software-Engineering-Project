@@ -21,11 +21,19 @@ class _BrandAdminDashboardState extends State<BrandAdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Image.asset('assets/images/logo.jpeg', height: 40),
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
+        title: Text(
+          'Outfitly Vendor',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff041511),
+          ),
+        ),
+        centerTitle: true,
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -35,6 +43,8 @@ class _BrandAdminDashboardState extends State<BrandAdminDashboard> {
             _selectedIndex = index;
           });
         },
+        selectedItemColor: Color(0xff041511),
+        unselectedItemColor: Color(0xff041511).withOpacity(0.5),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.inventory),

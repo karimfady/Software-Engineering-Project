@@ -211,6 +211,20 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Sales',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff041511),
+          ),
+        ),
+        centerTitle: true,
+      ),
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -226,24 +240,32 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                         children: [
                           Expanded(
                             child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: BorderSide(
+                                  color: Color(0xff041511).withOpacity(0.1),
+                                ),
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Total Revenue',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff041511),
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       '\$${totalRevenue.toStringAsFixed(2)}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 24,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff041511),
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ],
@@ -253,24 +275,32 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                           ),
                           Expanded(
                             child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: BorderSide(
+                                  color: Color(0xff041511).withOpacity(0.1),
+                                ),
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Total Items Sold',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff041511),
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       totalItemsSold.toString(),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 24,
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff041511),
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ],
@@ -282,20 +312,38 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                       ),
                       const SizedBox(height: 24),
                       // Sales by Product
-                      const Text(
+                      Text(
                         'Sales by Product',
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xff041511),
                         ),
                       ),
                       const SizedBox(height: 16),
                       salesData.isEmpty
-                          ? const Center(child: Text('No sales data found'))
+                          ? Center(
+                            child: Text(
+                              'No sales data found',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff041511),
+                              ),
+                            ),
+                          )
                           : Column(
                             children:
                                 salesData.map((product) {
                                   return Card(
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                        color: Color(
+                                          0xff041511,
+                                        ).withOpacity(0.1),
+                                      ),
+                                    ),
                                     margin: const EdgeInsets.only(bottom: 16),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
@@ -305,9 +353,10 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                                         children: [
                                           Text(
                                             product['product_name'],
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xff041511),
                                             ),
                                           ),
                                           const SizedBox(height: 8),
@@ -319,14 +368,22 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text('Quantity Sold'),
+                                                  Text(
+                                                    'Quantity Sold',
+                                                    style: TextStyle(
+                                                      color: Color(
+                                                        0xff041511,
+                                                      ).withOpacity(0.7),
+                                                    ),
+                                                  ),
                                                   Text(
                                                     product['quantity_sold']
                                                         .toString(),
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                          FontWeight.w600,
+                                                      color: Color(0xff041511),
                                                     ),
                                                   ),
                                                 ],
@@ -335,14 +392,21 @@ class _BrandAdminSalesState extends State<BrandAdminSales> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
                                                 children: [
-                                                  const Text('Revenue'),
+                                                  Text(
+                                                    'Revenue',
+                                                    style: TextStyle(
+                                                      color: Color(
+                                                        0xff041511,
+                                                      ).withOpacity(0.7),
+                                                    ),
+                                                  ),
                                                   Text(
                                                     '\$${product['revenue'].toStringAsFixed(2)}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Colors.green,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                          FontWeight.w600,
+                                                      color: Color(0xff041511),
                                                     ),
                                                   ),
                                                 ],
