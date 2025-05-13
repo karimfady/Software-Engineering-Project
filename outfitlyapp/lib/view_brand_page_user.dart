@@ -78,7 +78,20 @@ class _BrandPageState extends State<BrandPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.brandName), centerTitle: true),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          widget.brandName,
+          style: const TextStyle(
+            color: Color(0xff041511),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: RefreshIndicator(
         onRefresh: fetchBrandProducts,
         child: SingleChildScrollView(
@@ -94,22 +107,20 @@ class _BrandPageState extends State<BrandPage> {
                       height: 120,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(60),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
+                        borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           widget.brandLogo,
                           fit: BoxFit.contain,
                           width: 100,
                           height: 100,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.store, size: 50);
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                            return const Icon(
+                              Icons.store,
+                              size: 50,
+                              color: Color(0xff041511),
                             );
                           },
                         ),
@@ -120,7 +131,8 @@ class _BrandPageState extends State<BrandPage> {
                       widget.brandName,
                       style: const TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xff041511),
                       ),
                     ),
                   ],
@@ -140,8 +152,8 @@ class _BrandPageState extends State<BrandPage> {
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 childAspectRatio: 0.75,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
                               ),
                           itemCount: brandProducts.length,
                           itemBuilder: (context, index) {
@@ -163,12 +175,19 @@ class _BrandPageState extends State<BrandPage> {
                                               product.typeOfClothing,
                                           sizes: product.sizes,
                                           id: product.id,
-                                          stock: product.stock, // Add this line
+                                          stock: product.stock,
                                         ),
                                   ),
                                 );
                               },
                               child: Card(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: BorderSide(
+                                    color: Colors.grey.withOpacity(0.2),
+                                  ),
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -178,13 +197,13 @@ class _BrandPageState extends State<BrandPage> {
                                           color: Colors.grey[200],
                                           borderRadius:
                                               const BorderRadius.vertical(
-                                                top: Radius.circular(4),
+                                                top: Radius.circular(8),
                                               ),
                                         ),
                                         child: ClipRRect(
                                           borderRadius:
                                               const BorderRadius.vertical(
-                                                top: Radius.circular(4),
+                                                top: Radius.circular(8),
                                               ),
                                           child: Image.network(
                                             product.picture,
@@ -199,19 +218,8 @@ class _BrandPageState extends State<BrandPage> {
                                                 child: Icon(
                                                   Icons.image,
                                                   size: 40,
+                                                  color: Colors.grey,
                                                 ),
-                                              );
-                                            },
-                                            loadingBuilder: (
-                                              context,
-                                              child,
-                                              loadingProgress,
-                                            ) {
-                                              if (loadingProgress == null)
-                                                return child;
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
                                               );
                                             },
                                           ),
@@ -227,28 +235,47 @@ class _BrandPageState extends State<BrandPage> {
                                           Text(
                                             product.productName,
                                             style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
+                                          const SizedBox(height: 4),
                                           Text(
                                             '\$${product.price.toStringAsFixed(2)}',
                                             style: const TextStyle(
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xff041511),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
                                             ),
                                           ),
-                                          Text(
-                                            product.stock > 0
-                                                ? 'In Stock'
-                                                : 'Out of Stock',
-                                            style: TextStyle(
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
                                               color:
                                                   product.stock > 0
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                              fontWeight: FontWeight.bold,
+                                                      ? Colors.green[100]
+                                                      : Colors.red[100],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              product.stock > 0
+                                                  ? 'In Stock'
+                                                  : 'Out of Stock',
+                                              style: TextStyle(
+                                                color:
+                                                    product.stock > 0
+                                                        ? Colors.green[900]
+                                                        : Colors.red[900],
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
                                           ),
                                         ],

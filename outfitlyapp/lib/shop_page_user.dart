@@ -9,7 +9,20 @@ class ShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Shop'), centerTitle: true),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Shop',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -17,14 +30,43 @@ class ShopPage extends StatelessWidget {
           children: [
             // View All Brands Option
             Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+              ),
               child: ListTile(
-                leading: const Icon(Icons.store, size: 40),
+                contentPadding: const EdgeInsets.all(16),
+                leading: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.store,
+                    size: 24,
+                    color: Color(0xff041511),
+                  ),
+                ),
                 title: const Text(
                   'View All Brands',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff041511),
+                  ),
                 ),
-                subtitle: const Text('Browse through all available brands'),
-                trailing: const Icon(Icons.arrow_forward_ios),
+                subtitle: Text(
+                  'Browse through all available brands',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Color(0xff041511),
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -38,14 +80,43 @@ class ShopPage extends StatelessWidget {
             const SizedBox(height: 16),
             // View All Products Option
             Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+              ),
               child: ListTile(
-                leading: const Icon(Icons.shopping_bag, size: 40),
+                contentPadding: const EdgeInsets.all(16),
+                leading: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.shopping_bag,
+                    size: 24,
+                    color: Color(0xff041511),
+                  ),
+                ),
                 title: const Text(
                   'View All Products',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff041511),
+                  ),
                 ),
-                subtitle: const Text('Browse through all available products'),
-                trailing: const Icon(Icons.arrow_forward_ios),
+                subtitle: Text(
+                  'Browse through all available products',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Color(0xff041511),
+                ),
                 onTap: () {
                   Navigator.push(
                     context,

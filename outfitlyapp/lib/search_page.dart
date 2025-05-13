@@ -146,8 +146,18 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Search'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Search',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
@@ -170,7 +180,7 @@ class _SearchPageState extends State<SearchPage> {
                 fillColor: Colors.grey[200],
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -186,14 +196,15 @@ class _SearchPageState extends State<SearchPage> {
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Results:',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xff041511),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     Expanded(
                       child:
                           searchResults.isEmpty
@@ -212,13 +223,12 @@ class _SearchPageState extends State<SearchPage> {
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       childAspectRatio: 0.75,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 16,
                                     ),
                                 itemCount: searchResults.length,
                                 itemBuilder: (context, index) {
                                   final product = searchResults[index];
-
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(
@@ -237,14 +247,19 @@ class _SearchPageState extends State<SearchPage> {
                                                     product.typeOfClothing,
                                                 sizes: product.sizes,
                                                 id: product.id,
-                                                stock:
-                                                    product
-                                                        .stock, // Add this line
+                                                stock: product.stock,
                                               ),
                                         ),
                                       );
                                     },
                                     child: Card(
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(
+                                          color: Colors.grey.withOpacity(0.2),
+                                        ),
+                                      ),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -255,13 +270,13 @@ class _SearchPageState extends State<SearchPage> {
                                                 color: Colors.grey[200],
                                                 borderRadius:
                                                     const BorderRadius.vertical(
-                                                      top: Radius.circular(4),
+                                                      top: Radius.circular(8),
                                                     ),
                                               ),
                                               child: ClipRRect(
                                                 borderRadius:
                                                     const BorderRadius.vertical(
-                                                      top: Radius.circular(4),
+                                                      top: Radius.circular(8),
                                                     ),
                                                 child: Image.network(
                                                   product.picture,
@@ -273,33 +288,11 @@ class _SearchPageState extends State<SearchPage> {
                                                     stackTrace,
                                                   ) {
                                                     return const Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.image,
-                                                            size: 40,
-                                                          ),
-                                                          SizedBox(height: 8),
-                                                          Text(
-                                                            'Failed to load image',
-                                                          ),
-                                                        ],
+                                                      child: Icon(
+                                                        Icons.image,
+                                                        size: 40,
+                                                        color: Colors.grey,
                                                       ),
-                                                    );
-                                                  },
-                                                  loadingBuilder: (
-                                                    context,
-                                                    child,
-                                                    loadingProgress,
-                                                  ) {
-                                                    if (loadingProgress == null)
-                                                      return child;
-                                                    return const Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
                                                     );
                                                   },
                                                 ),
@@ -315,19 +308,23 @@ class _SearchPageState extends State<SearchPage> {
                                                 Text(
                                                   product.productName,
                                                   style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 14,
                                                   ),
                                                   maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
+                                                const SizedBox(height: 4),
                                                 Text(
                                                   '\$${product.price.toStringAsFixed(2)}',
                                                   style: const TextStyle(
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xff041511),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 14,
                                                   ),
                                                 ),
+                                                const SizedBox(height: 4),
                                                 Container(
                                                   padding:
                                                       const EdgeInsets.symmetric(
@@ -341,7 +338,7 @@ class _SearchPageState extends State<SearchPage> {
                                                             : Colors.red[100],
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          12,
+                                                          8,
                                                         ),
                                                   ),
                                                   child: Text(
@@ -355,6 +352,8 @@ class _SearchPageState extends State<SearchPage> {
                                                                   .green[900]
                                                               : Colors.red[900],
                                                       fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                 ),

@@ -59,10 +59,17 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: const Text(
           'All Brands',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         centerTitle: true,
       ),
@@ -96,9 +103,10 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                         );
                       },
                       child: Card(
-                        elevation: 4,
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(color: Colors.grey.withOpacity(0.2)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -108,17 +116,21 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                               height: 100,
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(8),
                                 child: Image.network(
                                   brand.logo,
                                   fit: BoxFit.contain,
                                   width: 90,
                                   height: 90,
                                   errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(Icons.store, size: 40);
+                                    return const Icon(
+                                      Icons.store,
+                                      size: 40,
+                                      color: Color(0xff041511),
+                                    );
                                   },
                                   loadingBuilder: (
                                     context,
@@ -138,7 +150,8 @@ class _ViewAllBrandsState extends State<ViewAllBrands> {
                               brand.name,
                               style: const TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xff041511),
                               ),
                               textAlign: TextAlign.center,
                             ),

@@ -239,7 +239,20 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product Details'), centerTitle: true),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Product Details',
+          style: TextStyle(
+            color: Color(0xff041511),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,11 +266,13 @@ class _ProductPageState extends State<ProductPage> {
                 widget.picture,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(child: Icon(Icons.image, size: 50));
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: Icon(
+                      Icons.image,
+                      size: 50,
+                      color: Color(0xff041511),
+                    ),
+                  );
                 },
               ),
             ),
@@ -271,7 +286,8 @@ class _ProductPageState extends State<ProductPage> {
                     widget.productName,
                     style: const TextStyle(
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xff041511),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -279,8 +295,8 @@ class _ProductPageState extends State<ProductPage> {
                     '\$${widget.price.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 20,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
+                      color: Color(0xff041511),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -288,7 +304,11 @@ class _ProductPageState extends State<ProductPage> {
                   // Description Section
                   const Text(
                     'Description',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xff041511),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _buildInfoRow('Brand', widget.brandName),
@@ -306,7 +326,7 @@ class _ProductPageState extends State<ProductPage> {
                           widget.stock > 0
                               ? Colors.green[100]
                               : Colors.red[100],
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       widget.stock > 0
@@ -317,7 +337,7 @@ class _ProductPageState extends State<ProductPage> {
                             widget.stock > 0
                                 ? Colors.green[900]
                                 : Colors.red[900],
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -327,13 +347,20 @@ class _ProductPageState extends State<ProductPage> {
                   // Quantity Selection
                   const Text(
                     'Quantity',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff041511),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Color(0xff041511),
+                        ),
                         onPressed: () {
                           if (quantity > 1) {
                             setState(() {
@@ -346,18 +373,23 @@ class _ProductPageState extends State<ProductPage> {
                         width: 50,
                         height: 40,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.2),
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
                           child: Text(
                             quantity.toString(),
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Color(0xff041511),
+                            ),
                           ),
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.add),
+                        icon: const Icon(Icons.add, color: Color(0xff041511)),
                         onPressed: () {
                           setState(() {
                             quantity++;
@@ -371,7 +403,11 @@ class _ProductPageState extends State<ProductPage> {
                   // Size Selection
                   const Text(
                     'Select Size',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff041511),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -381,22 +417,27 @@ class _ProductPageState extends State<ProductPage> {
                         widget.sizes.map((size) {
                           final isSelected = selectedSize == size;
                           return ChoiceChip(
-                            label: Text(size),
+                            label: Text(
+                              size,
+                              style: TextStyle(
+                                color:
+                                    isSelected
+                                        ? Colors.white
+                                        : Color(0xff041511),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             selected: isSelected,
                             onSelected: (selected) {
                               setState(() {
                                 selectedSize = selected ? size : null;
                               });
                             },
-                            selectedColor: Colors.blue[100],
                             backgroundColor: Colors.grey[200],
-                            labelStyle: TextStyle(
-                              color:
-                                  isSelected ? Colors.blue[900] : Colors.black,
-                              fontWeight:
-                                  isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                            selectedColor: Color(0xff041511),
+                            checkmarkColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           );
                         }).toList(),
@@ -418,10 +459,8 @@ class _ProductPageState extends State<ProductPage> {
                 onPressed: () async {
                   try {
                     if (!LoginLogic.isUserLoggedIn()) {
-                      // Navigate to login page
                       if (!mounted) return;
                       Navigator.pushNamed(context, '/login').then((_) {
-                        // After returning from login page, try adding to wishlist again
                         if (LoginLogic.isUserLoggedIn()) {
                           _addToWishlist(LoginLogic.getLoggedInUserEmail()!);
                         }
@@ -445,17 +484,23 @@ class _ProductPageState extends State<ProductPage> {
                 },
                 icon: Icon(
                   isInWishlist ? Icons.favorite : Icons.favorite_border,
-                  color: isInWishlist ? Colors.red : Colors.black,
+                  color: isInWishlist ? Colors.red : Color(0xff041511),
                 ),
                 label: Text(
                   isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist',
+                  style: TextStyle(
+                    color: isInWishlist ? Colors.red : Color(0xff041511),
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
+                  foregroundColor: Color(0xff041511),
                   side: BorderSide(
-                    color: isInWishlist ? Colors.red : Colors.black,
+                    color: isInWishlist ? Colors.red : Color(0xff041511),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
@@ -467,10 +512,8 @@ class _ProductPageState extends State<ProductPage> {
                         : () async {
                           try {
                             if (!LoginLogic.isUserLoggedIn()) {
-                              // Navigate to login page
                               if (!mounted) return;
                               Navigator.pushNamed(context, '/login').then((_) {
-                                // After returning from login page, try adding to cart again
                                 if (LoginLogic.isUserLoggedIn()) {
                                   _addToCart();
                                 }
@@ -488,6 +531,11 @@ class _ProductPageState extends State<ProductPage> {
                         },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Color(0xff041511),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: const Text('Add to Cart'),
               ),
@@ -503,8 +551,14 @@ class _ProductPageState extends State<ProductPage> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
-          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
+          Text(
+            '$label: ',
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Color(0xff041511),
+            ),
+          ),
+          Text(value, style: TextStyle(color: Colors.grey[600])),
         ],
       ),
     );
