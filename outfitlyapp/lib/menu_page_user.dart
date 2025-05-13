@@ -63,6 +63,11 @@ class _MenuPageState extends State<MenuPage> {
                       color: Color(0xff041511),
                     ),
                   ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
+                  ),
                   onTap: () {
                     Navigator.pushNamed(context, '/profile');
                   },
@@ -81,6 +86,11 @@ class _MenuPageState extends State<MenuPage> {
                       color: Color(0xff041511),
                     ),
                   ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
+                  ),
                   onTap: () {
                     Navigator.pushNamed(context, '/orders');
                   },
@@ -98,6 +108,11 @@ class _MenuPageState extends State<MenuPage> {
                       fontWeight: FontWeight.w500,
                       color: Color(0xff041511),
                     ),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
                   ),
                   onTap: () {
                     Navigator.push(

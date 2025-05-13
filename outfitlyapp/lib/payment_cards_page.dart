@@ -152,43 +152,83 @@ class _PaymentCardsPageState extends State<PaymentCardsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Payment Cards'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Payment Cards',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff041511),
+          ),
+        ),
         centerTitle: true,
         actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: _addNewCard),
+          IconButton(
+            icon: Icon(Icons.add, color: Color(0xff041511)),
+            onPressed: _addNewCard,
+          ),
         ],
       ),
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
+              : savedCards.isEmpty
+              ? Center(
+                child: Text(
+                  'No saved cards',
+                  style: TextStyle(fontSize: 16, color: Color(0xff041511)),
+                ),
+              )
               : ListView.builder(
                 padding: const EdgeInsets.all(16.0),
                 itemCount: savedCards.length,
                 itemBuilder: (context, index) {
                   final card = savedCards[index];
                   return Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(
+                        color: Color(0xff041511).withOpacity(0.1),
+                      ),
+                    ),
                     child: ListTile(
-                      leading: const Icon(Icons.credit_card),
+                      leading: Icon(
+                        Icons.credit_card,
+                        color: Color(0xff041511),
+                      ),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '**** **** **** ${card['card_number'].toString().substring(card['card_number'].toString().length - 4)}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff041511),
+                            ),
                           ),
                           if (card['card_name'] != null)
                             Text(
                               card['card_name'],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey,
+                                color: Color(0xff041511).withOpacity(0.7),
                               ),
                             ),
                         ],
                       ),
-                      subtitle: Text('Expires: ${card['expiry_date']}'),
+                      subtitle: Text(
+                        'Expires: ${card['expiry_date']}',
+                        style: TextStyle(
+                          color: Color(0xff041511).withOpacity(0.7),
+                        ),
+                      ),
                       trailing: IconButton(
-                        icon: const Icon(Icons.delete),
+                        icon: Icon(Icons.delete, color: Color(0xff041511)),
                         onPressed: () => _deleteCard(card['card_id']),
                       ),
                     ),
@@ -225,7 +265,14 @@ class _AddCardDialogState extends State<AddCardDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add New Card'),
+      title: Text(
+        'Add New Card',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Color(0xff041511),
+        ),
+      ),
       content: Form(
         key: _formKey,
         child: Column(
@@ -233,7 +280,18 @@ class _AddCardDialogState extends State<AddCardDialog> {
           children: [
             TextFormField(
               controller: _cardNumberController,
-              decoration: const InputDecoration(labelText: 'Card Number'),
+              decoration: InputDecoration(
+                labelText: 'Card Number',
+                labelStyle: TextStyle(color: Color(0xff041511)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xff041511).withOpacity(0.1),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff041511)),
+                ),
+              ),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -247,7 +305,18 @@ class _AddCardDialogState extends State<AddCardDialog> {
             ),
             TextFormField(
               controller: _cardHolderController,
-              decoration: const InputDecoration(labelText: 'Card Holder Name'),
+              decoration: InputDecoration(
+                labelText: 'Card Holder Name',
+                labelStyle: TextStyle(color: Color(0xff041511)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xff041511).withOpacity(0.1),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff041511)),
+                ),
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter card holder name';
@@ -257,8 +326,17 @@ class _AddCardDialogState extends State<AddCardDialog> {
             ),
             TextFormField(
               controller: _expiryDateController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Expiry Date (MM/YY)',
+                labelStyle: TextStyle(color: Color(0xff041511)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xff041511).withOpacity(0.1),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff041511)),
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -272,7 +350,18 @@ class _AddCardDialogState extends State<AddCardDialog> {
             ),
             TextFormField(
               controller: _cvvController,
-              decoration: const InputDecoration(labelText: 'CVV'),
+              decoration: InputDecoration(
+                labelText: 'CVV',
+                labelStyle: TextStyle(color: Color(0xff041511)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xff041511).withOpacity(0.1),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff041511)),
+                ),
+              ),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
