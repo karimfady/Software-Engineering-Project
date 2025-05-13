@@ -6,13 +6,21 @@ class ContactUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Contact Us'),
+        backgroundColor: Colors.white,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Contact Us",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff041511),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -20,48 +28,77 @@ class ContactUsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Get in Touch',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'We\'d love to hear from you! Fill out the form below and we\'ll get back to you as soon as possible.',
-              style: TextStyle(fontSize: 16),
+            // Contact Information
+            _buildContactSection(
+              title: "Customer Support",
+              content:
+                  "Our support team is available 24/7 to assist you with any questions or concerns.",
+              icon: Icons.support_agent,
             ),
             const SizedBox(height: 24),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
+            _buildContactSection(
+              title: "Email",
+              content: "support@outfitly.com",
+              icon: Icons.email,
+            ),
+            const SizedBox(height: 24),
+            _buildContactSection(
+              title: "Phone",
+              content: "+1 (555) 123-4567",
+              icon: Icons.phone,
+            ),
+            const SizedBox(height: 24),
+            _buildContactSection(
+              title: "Address",
+              content: "123 Fashion Street\nNew York, NY 10001\nUnited States",
+              icon: Icons.location_on,
+            ),
+            const SizedBox(height: 32),
+            // Contact Form
+            Text(
+              "Send us a Message",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff041511),
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: "Name",
+                labelStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff041511),
+                ),
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Subject',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.subject),
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Message',
+                labelText: "Email",
+                labelStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff041511),
+                ),
                 border: OutlineInputBorder(),
-                alignLabelWithHint: true,
               ),
-              maxLines: 5,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              maxLines: 4,
+              decoration: InputDecoration(
+                labelText: "Message",
+                labelStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff041511),
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 24),
             SizedBox(
@@ -69,30 +106,18 @@ class ContactUsPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement send message functionality
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Message sent successfully!')),
-                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  backgroundColor: Color(0xff041511),
+                  foregroundColor: Colors.white,
                 ),
-                child: const Text('Send Message'),
+                child: Text('Send Message'),
               ),
-            ),
-            const SizedBox(height: 32),
-            const Text(
-              'Contact Information',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildContactInfo(Icons.email, 'Email', 'support@outfitly.com'),
-            const SizedBox(height: 8),
-            _buildContactInfo(Icons.phone, 'Phone', '+1 (555) 123-4567'),
-            const SizedBox(height: 8),
-            _buildContactInfo(
-              Icons.location_on,
-              'Address',
-              '123 Fashion Street, Style City, SC 12345',
             ),
           ],
         ),
@@ -100,23 +125,39 @@ class ContactUsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContactInfo(IconData icon, String label, String value) {
+  Widget _buildContactSection({
+    required String title,
+    required String content,
+    required IconData icon,
+  }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: Colors.grey[600]),
-        const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(color: Colors.grey[600], fontSize: 14),
-            ),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-          ],
+        Icon(icon, color: Color(0xff041511), size: 24),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff041511),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                content,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff041511),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

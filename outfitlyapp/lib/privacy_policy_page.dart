@@ -6,13 +6,21 @@ class PrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Privacy Policy'),
+        backgroundColor: Colors.white,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Privacy Policy",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff041511),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -20,78 +28,64 @@ class PrivacyPolicyPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Privacy Policy',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Last updated: March 2024',
-              style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-            ),
-            const SizedBox(height: 24),
-            _buildSection(
-              '1. Information We Collect',
-              'We collect information that you provide directly to us, including:\n\n'
-                  '• Name and contact information\n'
-                  '• Email address\n'
-                  '• Shipping and billing address\n'
-                  '• Payment information\n'
-                  '• Order history\n'
-                  '• Preferences and settings',
-            ),
-            _buildSection(
-              '2. How We Use Your Information',
-              'We use the information we collect to:\n\n'
-                  '• Process and fulfill your orders\n'
-                  '• Communicate with you about your orders\n'
-                  '• Send you marketing communications (with your consent)\n'
-                  '• Improve our services and website\n'
-                  '• Prevent fraud and ensure security',
-            ),
-            _buildSection(
-              '3. Information Sharing',
-              'We do not sell your personal information. We may share your information with:\n\n'
-                  '• Service providers who assist in our operations\n'
-                  '• Payment processors\n'
-                  '• Shipping partners\n'
-                  '• Legal authorities when required by law',
-            ),
-            _buildSection(
-              '4. Your Rights',
-              'You have the right to:\n\n'
-                  '• Access your personal information\n'
-                  '• Correct inaccurate information\n'
-                  '• Request deletion of your information\n'
-                  '• Opt-out of marketing communications\n'
-                  '• Withdraw consent for data processing',
-            ),
-            _buildSection(
-              '5. Data Security',
-              'We implement appropriate security measures to protect your personal information. However, no method of transmission over the internet is 100% secure.',
-            ),
-            _buildSection(
-              '6. Cookies and Tracking',
-              'We use cookies and similar tracking technologies to improve your browsing experience and analyze website traffic.',
-            ),
-            _buildSection(
-              '7. Children\'s Privacy',
-              'Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13.',
-            ),
-            _buildSection(
-              '8. Changes to This Policy',
-              'We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.',
+            Text(
+              "Last Updated: March 15, 2024",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Color(0xff041511).withOpacity(0.7),
+              ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Contact Us',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            _buildSection(
+              title: "Introduction",
+              content:
+                  "At Outfitly, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.",
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'If you have any questions about this Privacy Policy, please contact us at:\n\n'
-              'Email: privacy@outfitly.com\n'
-              'Phone: +1 (555) 123-4567',
+            _buildSection(
+              title: "Information We Collect",
+              content:
+                  "We collect information that you provide directly to us, including your name, email address, phone number, and shipping address. We also collect information about your device and how you use our app.",
+            ),
+            _buildSection(
+              title: "How We Use Your Information",
+              content:
+                  "We use the information we collect to provide, maintain, and improve our services, to process your transactions, and to communicate with you about products, services, and promotional offers.",
+            ),
+            _buildSection(
+              title: "Information Sharing",
+              content:
+                  "We do not sell or rent your personal information to third parties. We may share your information with service providers who assist us in operating our app and conducting our business.",
+            ),
+            _buildSection(
+              title: "Data Security",
+              content:
+                  "We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+            ),
+            _buildSection(
+              title: "Your Rights",
+              content:
+                  "You have the right to access, correct, or delete your personal information. You can also object to the processing of your data or request data portability.",
+            ),
+            _buildSection(
+              title: "Cookies and Tracking",
+              content:
+                  "We use cookies and similar tracking technologies to track activity on our app and hold certain information to improve your experience.",
+            ),
+            _buildSection(
+              title: "Children's Privacy",
+              content:
+                  "Our app is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.",
+            ),
+            _buildSection(
+              title: "Changes to This Policy",
+              content:
+                  "We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.",
+            ),
+            _buildSection(
+              title: "Contact Us",
+              content:
+                  "If you have any questions about this Privacy Policy, please contact us at privacy@outfitly.com.",
             ),
           ],
         ),
@@ -99,18 +93,32 @@ class PrivacyPolicyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(String title, String content) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 24),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(content, style: const TextStyle(fontSize: 16)),
-      ],
+  Widget _buildSection({required String title, required String content}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xff041511),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Color(0xff041511),
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

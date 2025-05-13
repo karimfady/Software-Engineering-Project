@@ -17,22 +17,56 @@ class _BrandAdminMenuState extends State<BrandAdminMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Menu',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff041511),
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           // Support Section
-          const Text(
+          Text(
             'Support',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Color(0xff041511),
+            ),
           ),
           const SizedBox(height: 8),
           Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: BorderSide(color: Color(0xff041511).withOpacity(0.1)),
+            ),
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.help),
-                  title: const Text('Contact Us'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  leading: Icon(Icons.help_outline, color: Color(0xff041511)),
+                  title: Text(
+                    'Contact Us',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff041511),
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -42,11 +76,22 @@ class _BrandAdminMenuState extends State<BrandAdminMenu> {
                     );
                   },
                 ),
-                const Divider(),
+                Divider(color: Color(0xff041511).withOpacity(0.1)),
                 ListTile(
-                  leading: const Icon(Icons.info),
-                  title: const Text('About Us'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  leading: Icon(Icons.info_outline, color: Color(0xff041511)),
+                  title: Text(
+                    'About Us',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff041511),
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -56,11 +101,25 @@ class _BrandAdminMenuState extends State<BrandAdminMenu> {
                     );
                   },
                 ),
-                const Divider(),
+                Divider(color: Color(0xff041511).withOpacity(0.1)),
                 ListTile(
-                  leading: const Icon(Icons.privacy_tip),
-                  title: const Text('Privacy Policy'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  leading: Icon(
+                    Icons.privacy_tip_outlined,
+                    color: Color(0xff041511),
+                  ),
+                  title: Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff041511),
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Color(0xff041511),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -80,21 +139,22 @@ class _BrandAdminMenuState extends State<BrandAdminMenu> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // Implement logout logic
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
-                  (route) => false, // This removes all previous routes
+                  (route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: Color(0xff041511),
+                foregroundColor: Colors.white,
+                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const Text(
-                'Logout',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
+              child: const Text('Logout'),
             ),
           ),
         ],

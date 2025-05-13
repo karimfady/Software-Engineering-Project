@@ -6,13 +6,21 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('About Us'),
+        backgroundColor: Colors.white,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(Icons.arrow_back, color: Color(0xff041511)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "About Us",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff041511),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -20,62 +28,81 @@ class AboutUsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Logo
             Center(
-              child: Image.asset(
-                'assets/images/logo.jpeg',
-                height: 120,
-                width: 120,
-                fit: BoxFit.contain,
+              child: Text(
+                "Outfitly",
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xff041511),
+                ),
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Our Story',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // About Us Content
+            Text(
+              "Welcome to Outfitly",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff041511),
+              ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Outfitly was founded in 2024 with a simple mission: to make fashion accessible to everyone. We believe that everyone deserves to look and feel their best, regardless of their budget or location.',
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Outfitly is your premier destination for men's fashion, offering a curated selection of high-quality clothing and accessories. Our mission is to provide a seamless shopping experience with exceptional customer service.",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Color(0xff041511),
+              ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Our Values',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              "Our Story",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff041511),
+              ),
             ),
             const SizedBox(height: 16),
-            _buildValueCard(
-              Icons.thumb_up,
-              'Quality',
-              'We source only the highest quality products from trusted brands and manufacturers.',
+            Text(
+              "Founded with a passion for men's fashion, Outfitly has grown from a small boutique to a leading online destination for men's clothing. We work directly with brands to bring you the latest trends and timeless classics.",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Color(0xff041511),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "Our Values",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff041511),
+              ),
             ),
             const SizedBox(height: 16),
-            _buildValueCard(
-              Icons.attach_money,
-              'Affordability',
-              'We work directly with brands to bring you the best prices without compromising on quality.',
+            _buildValueItem(
+              icon: Icons.verified,
+              title: "Quality",
+              description:
+                  "We carefully select each item to ensure the highest quality for our customers.",
             ),
-            const SizedBox(height: 16),
-            _buildValueCard(
-              Icons.local_shipping,
-              'Fast Delivery',
-              'We ensure your orders are processed quickly and delivered to your doorstep in no time.',
+            _buildValueItem(
+              icon: Icons.support_agent,
+              title: "Customer Service",
+              description:
+                  "Our dedicated team is here to provide exceptional support and assistance.",
             ),
-            const SizedBox(height: 16),
-            _buildValueCard(
-              Icons.headset_mic,
-              'Customer Service',
-              'Our dedicated support team is always ready to help you with any questions or concerns.',
-            ),
-            const SizedBox(height: 32),
-            const Text(
-              'Our Team',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'We are a diverse team of fashion enthusiasts, tech experts, and customer service professionals working together to bring you the best shopping experience.',
-              style: TextStyle(fontSize: 16),
+            _buildValueItem(
+              icon: Icons.eco,
+              title: "Sustainability",
+              description:
+                  "We are committed to sustainable practices and ethical manufacturing.",
             ),
           ],
         ),
@@ -83,33 +110,43 @@ class AboutUsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildValueCard(IconData icon, String title, String description) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(icon, size: 40, color: Colors.blue),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+  Widget _buildValueItem({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Color(0xff041511), size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff041511),
                   ),
-                  const SizedBox(height: 8),
-                  Text(description, style: const TextStyle(fontSize: 14)),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff041511),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
